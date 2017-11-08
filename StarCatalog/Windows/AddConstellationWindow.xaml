@@ -1,0 +1,98 @@
+﻿<Window x:Class="StarCatalog.Windows.AddConstellationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StarCatalog.Windows"
+        xmlns:starCatalog="clr-namespace:StarCatalog"
+        mc:Ignorable="d"
+        Title="Add a constellation" 
+        Height="400" Width="400" >
+    <StackPanel HorizontalAlignment="Stretch"
+                Width="Auto"
+                VerticalAlignment="Center"
+                Margin="10">
+        <TextBlock Text="Input new constellation info" 
+                   HorizontalAlignment="Center"
+                   Margin="10 15"
+                   FontSize="18"/>
+        <Grid x:Name="Grid"
+              Margin="5" 
+              d:DataContext="{d:DesignInstance starCatalog:ConstellationChecker}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+                <Style x:Key="TextBoxStyle">
+                    <Setter Property="Control.HorizontalAlignment" Value="Center" />
+                    <Setter Property="Control.FontSize" Value="18" />
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock Text="Name:" 
+                       Style="{StaticResource TextBoxStyle}" />
+            <TextBlock Text="Right Ascension:" 
+                       Grid.Row="1"
+                       Style="{StaticResource TextBoxStyle}" />
+            <TextBlock Text="Declination:" 
+                       Grid.Row="2" 
+                       Style="{StaticResource TextBoxStyle}" />
+
+            <Button x:Name="ChoosePictureButton"
+                    Content="Choose picture:" 
+                    Grid.Row="3" 
+                    Style="{StaticResource ButtonStyleUniversal}" 
+                    Click="ChoosePictureButton_OnClick" />
+
+            <Image x:Name="Image"
+                   Source="../Images/NoImage.png"
+                   Grid.Column="1" Grid.Row="3"
+                   MaxHeight="100"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   MaxWidth="100"/>
+
+            <TextBox x:Name="NameTextBox"
+                     Grid.Row="0" Grid.Column="1" 
+                     Margin="3"
+                     Text="{Binding Path=Name,
+                                    ValidatesOnDataErrors=True,
+                                    ValidatesOnExceptions=True}" />
+
+            <TextBox x:Name="RightAscensionTextBox"       
+                     Grid.Row="1" Grid.Column="1" 
+                     Margin="3" 
+                     Text="{Binding Path=RightAscension,
+                                    ValidatesOnDataErrors=True,
+                                    ValidatesOnExceptions=True}" />
+
+                <TextBox x:Name="DeclinationTextBox"         
+                     Grid.Row="2" Grid.Column="1" 
+                     Margin="3"
+                     Text="{Binding Path=Declination,
+                                    ValidatesOnDataErrors=True,
+                                    ValidatesOnExceptions=True}" />
+
+        </Grid>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button x:Name="AddButton"
+                    Style="{StaticResource ButtonStyleUniversal}"
+                    Content="Add"
+                    Click="AddButton_OnClick" />
+            <Button x:Name="BackButton"
+                    Style="{StaticResource ButtonStyleUniversal}"
+                    Content="Back"
+                    Click="BackButton_OnClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

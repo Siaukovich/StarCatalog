@@ -1,0 +1,184 @@
+﻿<Window x:Class="StarCatalog.MainWindow"
+        x:Name="Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StarCatalog"
+        mc:Ignorable="d"
+        Title="Star catalog" 
+        Height="500" Width="700" 
+        MinWidth="650"
+        MinHeight="330">
+    <DockPanel >
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Create new constellation"
+                          Click="AddConstellationButton_OnClick"/>
+                <MenuItem Header="Remove all constellations"
+                          Click="RemoveAllButton_OnClick"/>
+                <Separator />
+                <MenuItem Header="Save to file"
+                          Click="MenuItem_OnClick" />
+                <MenuItem Header="Load from file"
+                          Click="MenuItem_OnClick" />
+                <Separator />
+                <MenuItem Header="Exit" 
+                          Click="ExitButton_OnClick"/>
+            </MenuItem>
+            <MenuItem Header="Plugins"
+                      x:Name="PluginsMenuItem" 
+                      Click="PluginsMenuItem_OnClick"/>
+        </Menu>
+        
+        <Grid Margin="10">
+            <!--Сетка 2 колонки x 3 ряда-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <DockPanel LastChildFill="True"
+                       VerticalAlignment="Center"
+                       Grid.Row="0"
+                       Margin="5">
+
+                <Label Content="Search for"
+                       DockPanel.Dock="Left" />
+
+                <ComboBox x:Name="SearchTypeComboBox"
+                          MinWidth="110" Padding="5 5 0 0"
+                          DropDownClosed="SearchTypeComboBox_OnDropDownClosed">
+                    <ComboBoxItem IsSelected="True"
+                                  Content="constellation" />
+                    <ComboBoxItem Content="star" />
+                    <ComboBoxItem Content="planet" />
+                </ComboBox>
+
+                <Label Content="by name"
+                       DockPanel.Dock="Left" />
+
+                <TextBox x:Name="SearchByNameTextBox"
+                         MinWidth="150"
+                         MaxLength="25"
+                         Height="20"
+                         TextChanged="TextBoxBase_OnTextChanged" />
+
+            </DockPanel>
+
+            <ListBox Grid.Row="1" Grid.RowSpan="2"
+                     Grid.Column="0"
+                     x:Name="ConstellationListBox"
+                     
+                     VerticalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     ScrollViewer.CanContentScroll="False">
+                <ListBox.ItemTemplate>
+                    <!-- Шаблон для отображения краткой информации по созвездию -->
+                    <DataTemplate>
+                        <Border BorderThickness="0 0 0 1"
+                                BorderBrush="Gray">
+
+                            <DockPanel LastChildFill="True">
+
+                                <Image Source="{Binding ImageUri}"
+                                       DockPanel.Dock="Left"
+                                       Width="100" Height="100"
+                                       VerticalAlignment="Center"
+                                       Margin="5" />
+
+                                <StackPanel DockPanel.Dock="Right"
+                                            VerticalAlignment="Center">
+                                    
+                                    <Button x:Name="InfoButton"
+                                            Tag="{Binding Index}"
+                                            IsEnabled="{Binding IsConstellation}"
+                                            Content="Show full info"
+                                            Margin="10" Padding="7"
+                                            Click="ButtonBase_OnClick" />
+
+                                    <Button x:Name="RemoveButton"
+                                            Tag="{Binding Index}"
+                                            IsEnabled="{Binding IsConstellation}"
+                                            Content="Remove"
+                                            Margin="10" Padding="7"
+                                            Click="ButtonBase_OnClick" />
+
+                                </StackPanel>                  
+                                
+                                <StackPanel VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <StackPanel.Resources>
+                                        <!-- Стиль для текстовых блоков -->
+                                        <Style x:Key="TextBlockStyle">
+                                            <Setter Property="Control.Margin" Value="3" />
+                                            <Setter Property="Control.FontSize" Value="15" />
+                                            <Setter Property="Control.FontWeight" Value="SemiBold" />
+                                        </Style>
+                                        <!-- Конец стиля для текстовых блоков -->
+                                    </StackPanel.Resources>
+
+                                    <TextBlock Text="{Binding Name, StringFormat='Name: {0}'}"
+                                               Style="{StaticResource TextBlockStyle}" />
+
+                                    <TextBlock Text="{Binding Host, StringFormat='Host: {0}'}"
+                                               Style="{StaticResource TextBlockStyle}" />
+
+                                    <TextBlock Text="{Binding AmountOfPlanets, StringFormat='Amount of planets: {0}'}"
+                                               Style="{StaticResource TextBlockStyle}" />
+
+                                    <TextBlock Text="{Binding AmountOfStars, StringFormat='Amount of stars: {0}'}"
+                                               Style="{StaticResource TextBlockStyle}" />
+
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                    <!-- Конец шаблона -->
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+                <DockPanel LastChildFill="True"
+                           Margin="10 0 10 20">
+                    <Label Content="Sort by"
+                           DockPanel.Dock="Left"
+                           Margin="3" />
+                    <ComboBox x:Name="SortTypeComboBox"
+                              Width="Auto"
+                              DropDownClosed="SortTypeComboBox_OnDropDownClosed"
+                              Margin="3">
+                        <ComboBoxItem IsSelected="True"
+                                      Content="Name" />
+                        <ComboBoxItem Content="Amount of stars" />
+                        <ComboBoxItem Content="Amount of planets" />
+                    </ComboBox>
+                </DockPanel>
+
+                <Button x:Name="AddConstellationButton"
+                        Content="Add new constellation"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="AddConstellationButton_OnClick" />
+
+                <Button x:Name="RemoveAllButton"
+                        Content="Remove all constellations"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="RemoveAllButton_OnClick" />
+
+                <Button x:Name="ExitButton"
+                        Content="Close Star Catalog"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="ExitButton_OnClick">
+                </Button>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
+
+
+
