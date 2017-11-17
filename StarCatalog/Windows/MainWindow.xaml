@@ -100,14 +100,14 @@
                                             IsEnabled="{Binding IsConstellation}"
                                             Content="Show full info"
                                             Margin="10" Padding="7"
-                                            Click="ButtonBase_OnClick" />
+                                            Click="InfoButton_OnClick" />
 
                                     <Button x:Name="RemoveButton"
                                             Tag="{Binding Index}"
                                             IsEnabled="{Binding IsConstellation}"
                                             Content="Remove"
                                             Margin="10" Padding="7"
-                                            Click="ButtonBase_OnClick" />
+                                            Click="RemoveButton_OnClick" />
 
                                 </StackPanel>                  
                                 

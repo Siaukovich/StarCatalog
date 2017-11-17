@@ -1,8 +1,11 @@
-﻿namespace StarCatalog
+﻿using System.Windows;
+
+namespace StarCatalog
 {
     public interface IPluginable
     {
         string Name { get; }
-        void Start(MainWindow mainWindow);
+        void Start();
+        void ShowFinalMessage();
     }
 }

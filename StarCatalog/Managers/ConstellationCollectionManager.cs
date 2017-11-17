@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace StarCatalog
 {
@@ -114,7 +111,7 @@ namespace StarCatalog
             AddRange(tempCollection);
         }
 
-        private static void AddRange(IEnumerable<Constellation> collection)
+        public static void AddRange(IEnumerable<Constellation> collection)
         {
             foreach (var constellation in collection)
             {

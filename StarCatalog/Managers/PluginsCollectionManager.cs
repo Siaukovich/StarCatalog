@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Documents;
 
 namespace StarCatalog
@@ -11,8 +12,9 @@ namespace StarCatalog
     {
         public static Dictionary<string, IPluginable> Plugins;
 
-        static PluginsCollectionManager()
+        public static async Task LoadPlugins()
         {
+            //await Task.Delay(10000);
             var currentDirectory = Directory.GetCurrentDirectory();
             var location = Path.Combine(currentDirectory.Substring(0, currentDirectory.Length - "Debug\\bin\\".Length), "Plugins");
 
@@ -32,12 +34,10 @@ namespace StarCatalog
             }
 
             var pluginType = typeof(IPluginable);
-            var plugins = assemblies.Where(assembly => assembly != null)
-                                    .SelectMany(assembly => assembly.GetTypes())
+            var plugins = assemblies.SelectMany(assembly => assembly.GetTypes())
                                     .Where(type => !type.IsInterface && !type.IsAbstract)
                                     .Where(type => type.GetInterface(pluginType.FullName) != null)
-                                    .Select(type => Activator.CreateInstance(type) as IPluginable)
-                                    .ToList();
+                                    .Select(type => Activator.CreateInstance(type) as IPluginable).ToList();
 
             Plugins = plugins.ToDictionary(p => p.Name);
         }

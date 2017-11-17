@@ -22,14 +22,13 @@ namespace StarCatalog
             LoadPlugins();
         }
 
-        private void LoadPlugins()
+        private async void LoadPlugins()
         {
-            if (PluginsCollectionManager.Plugins.Count == 0)
+            this.PluginsMenuItem.IsEnabled = false;
+            await PluginsCollectionManager.LoadPlugins();
+            if (PluginsCollectionManager.Plugins.Count != 0)
             {
-                this.PluginsMenuItem.IsEnabled = false;
-            }
-            else
-            {
+                this.PluginsMenuItem.IsEnabled = true;
                 this.PluginsMenuItem.ItemsSource = PluginsCollectionManager.Plugins.Keys;
             }
         }
@@ -44,7 +43,8 @@ namespace StarCatalog
 
             var pluginName = menuItem.Header.ToString();
             var plugin = PluginsCollectionManager.Plugins[pluginName];
-            plugin.Start(this);
+            plugin.Start();
+            plugin.ShowFinalMessage();
         }
 
         protected override void OnActivated(EventArgs e)
@@ -75,7 +75,10 @@ namespace StarCatalog
 
         private void SortTypeComboBox_OnDropDownClosed(object sender, EventArgs e)
         {
-            var optionSort = ((ComboBox) sender).Text;
+            if (!(sender is ComboBox comboBox))
+                return;
+
+            var optionSort = comboBox.Text;
             var typeList = this.SearchTypeComboBox.Text;
 
             if (typeList == "constellation")
@@ -123,7 +126,7 @@ namespace StarCatalog
             var option = (sender as ComboBox)?.Text;
             if (option == "constellation")
             {
-                OnActivated(EventArgs.Empty);
+                LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
                 this.SortTypeComboBox.IsEnabled = true;
             }
             else if (option == "star")
@@ -138,38 +141,35 @@ namespace StarCatalog
             }
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void RemoveButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button senderButton))
                 return;
 
             ConstellationCollectionManager.Current = (int) senderButton.Tag;
 
-            if (senderButton.Name == "InfoButton")
-            {
-                ShowFullInfo();
-            }
-            else
-            {
-                RemoveCurrent();
-            }
-        }
-
-        private void RemoveCurrent()
-        {
-            var result = MessageBox.Show("You sure you want to remove that element?\nYou cannot undo that later.", 
-                                         "Warning", MessageBoxButton.YesNo);
+            var result = MessageBox.Show("You sure you want to remove that element?\nYou cannot undo that later.",
+                "Warning", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.No)
                 return;
 
             ConstellationCollectionManager.RemoveCurrent();
-            this.OnActivated(EventArgs.Empty);
+            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
             MessageBox.Show("Element was removed successfully!", "Success", MessageBoxButton.OK);
             InfoStateController.InfoChanged();
         }
 
-        private void ShowFullInfo()
+        private void InfoButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button senderButton))
+                return;
+           
+            ConstellationCollectionManager.Current = (int)senderButton.Tag;
+            ShowFullInfoWindow();
+        }
+
+        private void ShowFullInfoWindow()
         {
             WindowsManager.StoreWindow(this);
             this.Hide();
@@ -234,9 +234,7 @@ namespace StarCatalog
             ConstellationCollectionManager.SaveToFile(fullPathToFile);
 
             MessageBox.Show("Saved!");
-
             InfoStateController.Reset();
-
             return true;
         }
 
