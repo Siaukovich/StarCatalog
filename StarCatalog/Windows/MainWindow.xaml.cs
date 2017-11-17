@@ -26,19 +26,18 @@ namespace StarCatalog
         {
             this.PluginsMenuItem.IsEnabled = false;
             await PluginsCollectionManager.LoadPlugins();
-            if (PluginsCollectionManager.Plugins.Count != 0)
-            {
-                this.PluginsMenuItem.IsEnabled = true;
-                this.PluginsMenuItem.ItemsSource = PluginsCollectionManager.Plugins.Keys;
-            }
+
+            // If no plugins were found.
+            if (PluginsCollectionManager.Plugins.Count == 0)
+                return;
+
+            this.PluginsMenuItem.IsEnabled = true;
+            this.PluginsMenuItem.ItemsSource = PluginsCollectionManager.Plugins.Keys;
         }
 
         private void PluginsMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
             if (!(e.OriginalSource is MenuItem menuItem))
-                return;
-
-            if (PluginsCollectionManager.Plugins.Count == 0)
                 return;
 
             var pluginName = menuItem.Header.ToString();

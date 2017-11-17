@@ -164,7 +164,7 @@ namespace StarCatalog
                     break;
                 case "Amount of stars":
                     var orderedByStarsAmount = from constellation in Constellations
-                                               orderby constellation.Stars.Count descending 
+                                               orderby constellation.Stars.Count descending
                                                select constellation;
 
                     returnList = orderedByStarsAmount.ToList();

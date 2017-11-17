@@ -37,7 +37,7 @@ namespace StarCatalog
             var plugins = assemblies.SelectMany(assembly => assembly.GetTypes())
                                     .Where(type => !type.IsInterface && !type.IsAbstract)
                                     .Where(type => type.GetInterface(pluginType.FullName) != null)
-                                    .Select(type => Activator.CreateInstance(type) as IPluginable).ToList();
+                                    .Select(type => Activator.CreateInstance(type) as IPluginable);
 
             Plugins = plugins.ToDictionary(p => p.Name);
         }
