@@ -60,8 +60,8 @@ namespace LoadFilePlugin
         {
             var ds = new NetDataContractSerializer();
             using (var stream = File.OpenRead(fullPathToFile))
-            using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
-                return (T)ds.ReadObject(deflateStream);
+                using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+                    return (T)ds.ReadObject(deflateStream);
         }
 
         public void ShowFinalMessage()

@@ -167,8 +167,5 @@
   <ItemGroup>
     <Folder Include="Plugins\" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="TO-DO List.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

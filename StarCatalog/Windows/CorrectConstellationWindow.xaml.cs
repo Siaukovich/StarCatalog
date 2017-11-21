@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -26,7 +27,7 @@ namespace StarCatalog.Windows
             };
         }
 
-        private void ChangePictureButton_OnClick(object sender, RoutedEventArgs e)
+        private void ChangeImageButton_OnClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -39,6 +40,14 @@ namespace StarCatalog.Windows
             var imageUri = openFileDialog.FileName;
             ConstellationCollectionManager.GetCurrectConstellation().ImageUri = imageUri;
             this.Image.Source = new BitmapImage(new Uri(imageUri));
+        }
+
+        private void ResetImageButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var path = Environment.CurrentDirectory;
+            const string cutOffPart = @"Debug\bin";
+            path = path.Substring(0, path.Length - cutOffPart.Length) + @"Images\NoImage.png";
+            this.Image.Source = new BitmapImage(new Uri(path));
         }
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)

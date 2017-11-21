@@ -47,12 +47,17 @@
                        Grid.Row="2" 
                        Style="{StaticResource TextBoxStyle}" />
 
-            <Button x:Name="ChoosePictureButton"
-                    Content="Choose picture:" 
-                    Grid.Row="3" 
-                    Style="{StaticResource ButtonStyleUniversal}" 
-                    Click="ChoosePictureButton_OnClick" />
-
+            <StackPanel Grid.Row="3">
+                <Button x:Name="ChoosePImageButton"
+                        Content="Choose image"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="ChooseImageButton_OnClick" />
+                <Button x:Name="ResetImageButton"
+                        Content="Reset image"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="ResetImageButton_OnClick"/>
+            </StackPanel>
+            
             <Image x:Name="Image"
                    Source="../Images/NoImage.png"
                    Grid.Column="1" Grid.Row="3"

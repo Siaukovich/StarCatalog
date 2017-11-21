@@ -25,7 +25,7 @@ namespace StarCatalog
         private async void LoadPlugins()
         {
             this.PluginsMenuItem.IsEnabled = false;
-            await PluginsCollectionManager.LoadPlugins();
+            await PluginsCollectionManager.LoadPluginsAsync();
 
             // If no plugins were found.
             if (PluginsCollectionManager.Plugins.Count == 0)

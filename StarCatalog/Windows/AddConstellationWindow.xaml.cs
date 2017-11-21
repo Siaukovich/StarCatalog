@@ -63,7 +63,7 @@ namespace StarCatalog.Windows
                      Validation.GetHasError(this.DeclinationTextBox));
         }
 
-        private void ChoosePictureButton_OnClick(object sender, RoutedEventArgs e)
+        private void ChooseImageButton_OnClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -75,6 +75,14 @@ namespace StarCatalog.Windows
 
             _pictureUri = openFileDialog.FileName;
             this.Image.Source = new BitmapImage(new Uri(_pictureUri));
+        }
+
+        private void ResetImageButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var path = Environment.CurrentDirectory;
+            const string cutOffPart = @"Debug\bin";
+            path = path.Substring(0, path.Length - cutOffPart.Length) + @"Images\NoImage.png";
+            this.Image.Source = new BitmapImage(new Uri(path));
         }
 
         private void BackButton_OnClick(object sender, RoutedEventArgs e)

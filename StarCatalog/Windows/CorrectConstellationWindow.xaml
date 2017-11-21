@@ -14,10 +14,10 @@
                 Margin="10">
         <TextBlock Text="Correct constellation info" 
                    HorizontalAlignment="Center"
-                   Margin="10 15"
+                   Margin="10 10"
                    FontSize="18"/>
         <Grid x:Name="Grid"
-              Margin="5" >
+              Margin="5 0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
@@ -45,11 +45,17 @@
                        Grid.Row="2" 
                        Style="{StaticResource TextBoxStyle}" />
 
-            <Button x:Name="ChangePictureButton"
-                    Content="Change picture:" 
-                    Grid.Row="3" 
-                    Style="{StaticResource ButtonStyleUniversal}" 
-                    Click="ChangePictureButton_OnClick" />
+            <StackPanel Grid.Row="3">
+                <Button x:Name="ChangeImageButton"
+                        Content="Change image:" 
+                        Style="{StaticResource ButtonStyleUniversal}" 
+                        Click="ChangeImageButton_OnClick" />
+                <Button x:Name="ResetImageButton"
+                        Content="Reset image"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="ResetImageButton_OnClick" />
+            </StackPanel>
+            
 
             <Image x:Name="Image"
                    Source="../Images/NoImage.png"

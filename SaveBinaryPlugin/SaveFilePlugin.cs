@@ -14,15 +14,22 @@ namespace SaveBinaryPlugin
     {
         public string Name => "Save data to file";
 
+        private bool _saveFileSuccessfully;
+
         public void Start()
         {
+            _saveFileSuccessfully = false;
+
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "Choose (*.txt)|*.txt"
             };
 
             if (saveFileDialog.ShowDialog() != true)
+            {
+                _saveFileSuccessfully = true;
                 return;
+            }
 
             var fullPathToFile = saveFileDialog.FileName;
             SerializeCollectionXml(ConstellationCollectionManager.Constellations, fullPathToFile);
@@ -37,6 +44,10 @@ namespace SaveBinaryPlugin
                     ds.WriteObject(deflateStream, collection);
         }
 
-        public void ShowFinalMessage() => MessageBox.Show("Saved!");
+        public void ShowFinalMessage()
+        {
+            if (_saveFileSuccessfully)
+                MessageBox.Show("Saved!");
+        }
     }
 }

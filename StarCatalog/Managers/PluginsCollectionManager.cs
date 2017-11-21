@@ -12,9 +12,9 @@ namespace StarCatalog
     {
         public static Dictionary<string, IPluginable> Plugins;
 
-        public static async Task LoadPlugins()
+        public static async Task LoadPluginsAsync()
         {
-            //await Task.Delay(10000);
+            //await Task.Delay(3000);
             var currentDirectory = Directory.GetCurrentDirectory();
             var location = Path.Combine(currentDirectory.Substring(0, currentDirectory.Length - "Debug\\bin\\".Length), "Plugins");
 
