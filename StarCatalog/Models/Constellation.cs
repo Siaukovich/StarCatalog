@@ -43,7 +43,7 @@ namespace StarCatalog
                 }
                 // Get drives letters in one string.
                 var drives = DriveInfo.GetDrives()
-                                      .Select(d => d.Name[0].ToString())
+                                      .Select(drive => drive.Name[0].ToString())
                                       .Aggregate((n1, n2) => n1 + n2);
 
                 // Patern that catches full path.

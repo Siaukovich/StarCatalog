@@ -78,6 +78,13 @@
                      VerticalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"
                      ScrollViewer.CanContentScroll="False">
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Focusable" Value="False"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
                 <ListBox.ItemTemplate>
                     <!-- Шаблон для отображения краткой информации по созвездию -->
                     <DataTemplate>

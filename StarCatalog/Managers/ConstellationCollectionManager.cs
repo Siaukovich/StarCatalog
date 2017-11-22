@@ -127,10 +127,10 @@ namespace StarCatalog
                                                                 .OrderBy(star => star.Name)
                                                                 .ToList();
 
-        public static List<Planet> GetAllPlanets() => GetAllStars()
-                                                     .SelectMany(star => star.Planets)
-                                                     .OrderBy(planet => planet.Name)
-                                                     .ToList();
+        public static List<Planet> GetAllPlanets() => Constellations.SelectMany(constellation => constellation.Stars)
+                                                                    .SelectMany(star => star.Planets)
+                                                                    .OrderBy(planet => planet.Name)
+                                                                    .ToList();
 
         public static List<Constellation> GetConstellationByNameStart(string nameStart)
         {
@@ -149,7 +149,6 @@ namespace StarCatalog
         public static List<Planet> GetPlanetByNameStart(string nameStart)
         {
             nameStart = nameStart.ToLower();
-
             return GetAllPlanets().Where(planet => planet.Name.ToLower().StartsWith(nameStart))
                                   .ToList();
         }
