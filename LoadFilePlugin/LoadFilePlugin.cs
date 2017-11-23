@@ -13,7 +13,7 @@ namespace LoadFilePlugin
 {
     public class LoadFilePlugin : IPluginable
     {
-        public string Name => "Load from file";
+        public string Name => "Load data from file";
 
         private bool _readFileSuccessfully;
 

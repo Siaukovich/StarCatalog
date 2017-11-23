@@ -6,9 +6,9 @@
     <Application.Resources>
         <!-- Стиль для кнопок -->
         <Style x:Key="ButtonStyleUniversal">
-            <Setter Property="Control.Margin"  Value="10" />
+            <Setter Property="Control.Margin"  Value="20 10" />
             <Setter Property="Control.Padding" Value="10" />
-            <Setter Property="Control.HorizontalAlignment" Value="Center"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Control.VerticalAlignment" Value="Center" />
         </Style>
         <!-- Конец стиля для кнопок -->

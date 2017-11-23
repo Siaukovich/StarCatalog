@@ -14,14 +14,14 @@ namespace StarCatalog
 
         public static async Task LoadPluginsAsync()
         {
-            //await Task.Delay(3000);
+            await Task.Delay(2000);
             var currentDirectory = Directory.GetCurrentDirectory();
             var location = Path.Combine(currentDirectory.Substring(0, currentDirectory.Length - "Debug\\bin\\".Length), "Plugins");
 
             if (!Directory.Exists(location))
             {
                 Plugins = new Dictionary<string, IPluginable>();
-                return;
+                throw new DirectoryNotFoundException("Directory for plugins not found!");
             }
 
             var dllNames = Directory.GetFiles(location, "*.dll", SearchOption.AllDirectories);
@@ -35,9 +35,9 @@ namespace StarCatalog
 
             var pluginType = typeof(IPluginable);
             var plugins = assemblies.SelectMany(assembly => assembly.GetTypes())
-                                    .Where(type => !type.IsInterface && !type.IsAbstract)
-                                    .Where(type => type.GetInterface(pluginType.FullName) != null)
-                                    .Select(type => Activator.CreateInstance(type) as IPluginable);
+                .Where(type => !type.IsInterface && !type.IsAbstract)
+                .Where(type => type.GetInterface(pluginType.FullName) != null)
+                .Select(type => Activator.CreateInstance(type) as IPluginable);
 
             Plugins = plugins.ToDictionary(p => p.Name);
         }

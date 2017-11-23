@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 
 namespace StarCatalog
 {
@@ -20,7 +24,7 @@ namespace StarCatalog
         static ConstellationCollectionManager()
         {
             Constellations = new ObservableCollection<Constellation>();
-            Constellations.CollectionChanged += (s, e) => 
+            Constellations.CollectionChanged += (s, e) =>
             {
                 for (int i = 0; i < Constellations.Count; i++)
                 {
@@ -123,34 +127,77 @@ namespace StarCatalog
         public static List<Constellation> GetAllConstellations() => Constellations.OrderBy(constellation => constellation.Name)
                                                                                   .ToList();
 
-        public static List<Star> GetAllStars() => Constellations.SelectMany(constellation => constellation.Stars)
-                                                                .OrderBy(star => star.Name)
-                                                                .ToList();
+        public static List<Star> GetAllStars()
+        {
+            var sw = new Stopwatch(); // For debug, to see benefits of PLINQ.
+            sw.Start();
+            var a = Constellations//.AsParallel()
+                .SelectMany(constellation =>
+                {
+                    Thread.Sleep(100); // For debug, to see benefits of PLINQ.
+                    return constellation.Stars;
+                })
+                .OrderBy(star => star.Name)
+                .ToList();
+            sw.Stop();
 
-        public static List<Planet> GetAllPlanets() => Constellations.SelectMany(constellation => constellation.Stars)
-                                                                    .SelectMany(star => star.Planets)
-                                                                    .OrderBy(planet => planet.Name)
-                                                                    .ToList();
+            // For debug, to see benefits of PLINQ.
+            MessageBox.Show(sw.Elapsed.TotalSeconds.ToString(CultureInfo.CurrentCulture));
+
+            return a;
+        }
+
+        public static List<Planet> GetAllPlanets()
+        {
+            var sw = new Stopwatch();  // For debug, to see benefits of PLINQ.
+            sw.Start();
+            var a = GetAllStars()
+                   .AsParallel()
+                   .SelectMany(star =>
+                   {
+                       Thread.Sleep(100); // For debug, to see benefits of PLINQ.
+                       return star.Planets;
+                   })
+                   .OrderBy(planet => planet.Name)
+                   .ToList();
+            sw.Stop();
+
+            // For debug, to see benefits of PLINQ.
+            MessageBox.Show(sw.Elapsed.TotalSeconds.ToString(CultureInfo.CurrentCulture));
+
+            return a;
+        }
 
         public static List<Constellation> GetConstellationByNameStart(string nameStart)
         {
             nameStart = nameStart.ToLower();
-            return Constellations.Where(constellation => constellation.Name.ToLower().StartsWith(nameStart))
+            return Constellations.AsParallel()
+                                 .Where(constellation => constellation.Name.ToLower().StartsWith(nameStart))
                                  .ToList();
         }
 
         public static List<Star> GetStarByNameStart(string nameStart)
         {
             nameStart = nameStart.ToLower();
-            return GetAllStars().Where(star => star.Name.ToLower().StartsWith(nameStart))
+            return GetAllStars().AsParallel()
+                                .Where(star => star.Name.ToLower().StartsWith(nameStart))
                                 .ToList();
         }
 
         public static List<Planet> GetPlanetByNameStart(string nameStart)
         {
             nameStart = nameStart.ToLower();
-            return GetAllPlanets().Where(planet => planet.Name.ToLower().StartsWith(nameStart))
+
+            return GetAllPlanets().AsParallel()
+                                  .Where(planet => planet.Name.ToLower().StartsWith(nameStart))
                                   .ToList();
+        }
+
+        public static List<Star> GetStarsGroupedByConstellation()
+        {
+            return GetAllStars().GroupBy(s => s.Host.Name)
+                                .SelectMany(s => s)
+                                .ToList();
         }
 
         public static List<Constellation> GetConstellationsSortedBy(string sortTypeString)

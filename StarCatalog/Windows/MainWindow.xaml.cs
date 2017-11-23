@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -19,25 +21,63 @@ namespace StarCatalog
         {
             InitializeComponent();
             LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            this.Show();
             LoadPlugins();
         }
 
         private async void LoadPlugins()
         {
             this.PluginsMenuItem.IsEnabled = false;
-            await PluginsCollectionManager.LoadPluginsAsync();
+            this.PluginsMenuItem.Header = "Loading plugins...";
 
-            // If no plugins were found.
-            if (PluginsCollectionManager.Plugins.Count == 0)
-                return;
+            var items = new List<object>();
+            try
+            {
+                await PluginsCollectionManager.LoadPluginsAsync();
 
-            this.PluginsMenuItem.IsEnabled = true;
-            this.PluginsMenuItem.ItemsSource = PluginsCollectionManager.Plugins.Keys;
+                // If no plugins were found.
+                if (PluginsCollectionManager.Plugins.Count == 0)
+                {
+                    this.PluginsMenuItem.Header = "No plugins";
+                    return;
+                }
+
+                items = PluginsCollectionManager.Plugins.Keys.Select(p => (object)p).ToList();
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                MessageBox.Show(e.Message);
+                this.PluginsMenuItem.Header = "No plugins";
+            }
+            finally
+            {
+                items.Add(new Separator());
+                items.Add(GetReloadPluginsMenuItem());
+
+                this.PluginsMenuItem.Header = "Plugins";
+                this.PluginsMenuItem.ItemsSource = items;
+                this.PluginsMenuItem.IsEnabled = true;
+            }
+        }
+
+        private MenuItem GetReloadPluginsMenuItem()
+        {
+            var newMenuItem = new MenuItem { Header = "Reload plugins" };
+            newMenuItem.Click += MenuItem_ReloadPlugins_OnClick;
+            return newMenuItem;
+        }
+
+        private void MenuItem_ReloadPlugins_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadPlugins();
         }
 
         private void PluginsMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
             if (!(e.OriginalSource is MenuItem menuItem))
+                return;
+
+            if (menuItem.Header.ToString() == "Reload plugins")
                 return;
 
             var pluginName = menuItem.Header.ToString();
@@ -49,6 +89,7 @@ namespace StarCatalog
         protected override void OnActivated(EventArgs e)
         {
             LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            this.SortTypeComboBox.Text = "Name";
         }
 
         private void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -100,8 +141,8 @@ namespace StarCatalog
                 return;
             }
 
-            var messageBoxResult = MessageBox.Show("Are you sure that you want to delete ALL constellations?", 
-                                                   "Confirmation", MessageBoxButton.YesNo);
+            var messageBoxResult = MessageBox.Show("Are you sure that you want to delete ALL constellations?",
+                "Confirmation", MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.No)
                 return;
@@ -130,7 +171,7 @@ namespace StarCatalog
             }
             else if (option == "star")
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetAllStars());
+                LoadCollectionToListBox(ConstellationCollectionManager.GetStarsGroupedByConstellation());
                 this.SortTypeComboBox.IsEnabled = false;
             }
             else if (option == "planet")
@@ -163,8 +204,8 @@ namespace StarCatalog
         {
             if (!(sender is Button senderButton))
                 return;
-           
-            ConstellationCollectionManager.Current = (int)senderButton.Tag;
+
+            ConstellationCollectionManager.Current = (int) senderButton.Tag;
             ShowFullInfoWindow();
         }
 
@@ -184,18 +225,12 @@ namespace StarCatalog
             addConstellationWindow.Show();
         }
 
-        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_Save_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!(e.OriginalSource is MenuItem menuItem))
-                return;
-
-            if (menuItem.Header.ToString() == "Save to file")
-                SaveToFile();
-            if (menuItem.Header.ToString() == "Load from file")
-                LoadFromFile();
+            SaveToFile();
         }
 
-        private void LoadFromFile()
+        private void MenuItem_Load_OnClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog()
             {
@@ -244,18 +279,36 @@ namespace StarCatalog
                 this.Close();
                 return;
             }
-            var result = MessageBox.Show("Changes were made. You want to save them?\nYou will lose unsaved data.",
-                "Warning", MessageBoxButton.YesNoCancel);
 
-            if (result == MessageBoxResult.Yes)
+            var result = MessageBox.Show(
+                "Data was changed! Do you want to save changes?\nAny unsaved data will be lost otherwise!",
+                "Warning!", MessageBoxButton.YesNoCancel);
+
+            switch (result)
             {
-                if (!SaveToFile())
-                    return;
-            }
-            else if (result == MessageBoxResult.Cancel)
-                return;
+                // Exit without save.
+                case MessageBoxResult.No:
+                {
+                    this.Close();
+                    break;
+                }
 
-            this.Close();
+                // Return back to program.
+                case MessageBoxResult.Cancel:
+                {
+                    break;
+                }
+
+                // If was save was made, exit.
+                // Back to program otherwise.
+                case MessageBoxResult.Yes:
+                {
+                    if (SaveToFile())
+                        this.Close();
+
+                    break;
+                }
+            }
         }
     }
 }

@@ -19,9 +19,9 @@
                           Click="RemoveAllButton_OnClick"/>
                 <Separator />
                 <MenuItem Header="Save to file"
-                          Click="MenuItem_OnClick" />
+                          Click="MenuItem_Save_OnClick" />
                 <MenuItem Header="Load from file"
-                          Click="MenuItem_OnClick" />
+                          Click="MenuItem_Load_OnClick" />
                 <Separator />
                 <MenuItem Header="Exit" 
                           Click="ExitButton_OnClick"/>
@@ -30,7 +30,7 @@
                       x:Name="PluginsMenuItem" 
                       Click="PluginsMenuItem_OnClick"/>
         </Menu>
-        
+
         <Grid Margin="10">
             <!--Сетка 2 колонки x 3 ряда-->
             <Grid.ColumnDefinitions>
@@ -101,7 +101,7 @@
 
                                 <StackPanel DockPanel.Dock="Right"
                                             VerticalAlignment="Center">
-                                    
+
                                     <Button x:Name="InfoButton"
                                             Tag="{Binding Index}"
                                             IsEnabled="{Binding IsConstellation}"
@@ -116,8 +116,8 @@
                                             Margin="10" Padding="7"
                                             Click="RemoveButton_OnClick" />
 
-                                </StackPanel>                  
-                                
+                                </StackPanel>
+
                                 <StackPanel VerticalAlignment="Center"
                                             HorizontalAlignment="Center">
                                     <StackPanel.Resources>
