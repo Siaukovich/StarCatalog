@@ -1,0 +1,40 @@
+﻿<Window x:Class="StarCatalog.Windows.PageViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StarCatalog.Windows"
+        mc:Ignorable="d"
+        Title="Page View" Height="400" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Frame></Frame>
+        
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
+            <Button x:Name="FirstElementButton"
+                    Content="First"
+                    Style="{StaticResource ButtonStyleUniversal}" />
+            
+            <Button x:Name="PreviousElementButton"
+                    Content="Previous"
+                    Style="{StaticResource ButtonStyleUniversal}" />
+            
+            <Button x:Name="NextElementButton"
+                    Content="Next"
+                    Style="{StaticResource ButtonStyleUniversal}" />
+            
+            <Button x:Name="LastElementButton"
+                    Content="Last"
+                    Style="{StaticResource ButtonStyleUniversal}" />
+
+            <Button x:Name="RandomElementButton"
+                    Content="Random"
+                    Style="{StaticResource ButtonStyleUniversal}" />
+        </StackPanel>
+    </Grid>
+</Window>

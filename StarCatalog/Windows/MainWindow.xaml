@@ -177,6 +177,11 @@
                         Style="{StaticResource ButtonStyleUniversal}"
                         Click="RemoveAllButton_OnClick" />
 
+                <Button x:Name="PageViewButton"
+                        Content="Page View"
+                        Style="{StaticResource ButtonStyleUniversal}"
+                        Click="PageViewButton_OnClick"/>
+                
                 <Button x:Name="ExitButton"
                         Content="Close Star Catalog"
                         Style="{StaticResource ButtonStyleUniversal}"

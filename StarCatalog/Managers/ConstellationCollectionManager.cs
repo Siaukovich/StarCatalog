@@ -131,14 +131,14 @@ namespace StarCatalog
         {
             var sw = new Stopwatch(); // For debug, to see benefits of PLINQ.
             sw.Start();
-            var a = Constellations//.AsParallel()
-                .SelectMany(constellation =>
-                {
-                    Thread.Sleep(100); // For debug, to see benefits of PLINQ.
-                    return constellation.Stars;
-                })
-                .OrderBy(star => star.Name)
-                .ToList();
+            var a = Constellations.AsParallel()
+                                  .SelectMany(constellation =>
+                                  {
+                                      Thread.Sleep(100); // For debug, to see benefits of PLINQ.
+                                      return constellation.Stars;
+                                  })
+                                  .OrderBy(star => star.Name)
+                                  .ToList();
             sw.Stop();
 
             // For debug, to see benefits of PLINQ.
@@ -149,23 +149,11 @@ namespace StarCatalog
 
         public static List<Planet> GetAllPlanets()
         {
-            var sw = new Stopwatch();  // For debug, to see benefits of PLINQ.
-            sw.Start();
-            var a = GetAllStars()
-                   .AsParallel()
-                   .SelectMany(star =>
-                   {
-                       Thread.Sleep(100); // For debug, to see benefits of PLINQ.
-                       return star.Planets;
-                   })
-                   .OrderBy(planet => planet.Name)
-                   .ToList();
-            sw.Stop();
-
-            // For debug, to see benefits of PLINQ.
-            MessageBox.Show(sw.Elapsed.TotalSeconds.ToString(CultureInfo.CurrentCulture));
-
-            return a;
+            return GetAllStars()
+                  .AsParallel()
+                  .SelectMany(star => star.Planets)
+                  .OrderBy(planet => planet.Name)
+                  .ToList();
         }
 
         public static List<Constellation> GetConstellationByNameStart(string nameStart)

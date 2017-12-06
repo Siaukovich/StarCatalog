@@ -310,5 +310,13 @@ namespace StarCatalog
                 }
             }
         }
+
+        private void PageViewButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            WindowsManager.StoreWindow(this);
+            this.Hide();
+            var pageViewWindow = new PageViewWindow();
+            pageViewWindow.Show();
+        }
     }
 }
