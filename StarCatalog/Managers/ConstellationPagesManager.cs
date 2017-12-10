@@ -22,9 +22,6 @@ namespace StarCatalog
             if (totalSize == 0)
                 throw new InvalidOperationException("Constellation collection is empty!");
 
-            if (currentPageIndex < 1 || currentPageIndex > totalSize)
-                throw new ArgumentOutOfRangeException(nameof(currentPageIndex), @"Index out of range!");
-
             CurrentPageNumber = currentPageIndex;
 
             CurrentPage = new ConstellationViewPage(currentPageIndex);
@@ -41,6 +38,47 @@ namespace StarCatalog
             {
                 NextPage = new ConstellationViewPage(currentPageIndex + 1);
             }
+
+            // If current element isn't the first one.
+            if (currentIndexInCollection != 0)
+            {
+                PreviousPage = new ConstellationViewPage(currentPageIndex - 1);
+            }
+        }
+
+        // Change return type to Task and add await where called.
+        public static async Task UpdateToNextAsync(int currentPageIndex)
+        {
+            //await Task.Delay(2000);
+
+            CurrentPageNumber = currentPageIndex;
+
+            PreviousPage = CurrentPage;
+            CurrentPage = NextPage;
+            NextPage = null;
+
+            int currentIndexInCollection = currentPageIndex - 1;
+            int totalSize = ConstellationCollectionManager.Constellations.Count;
+
+            // If current element isn't the last one.
+            if (currentIndexInCollection != totalSize - 1)
+            {
+                NextPage = new ConstellationViewPage(currentPageIndex + 1);
+            }
+        }
+
+        // Change return type to Task and add await where called.
+        public static async Task UpdateToPrevAsync(int currentPageIndex)
+        {
+            //await Task.Delay(2000);
+
+            CurrentPageNumber = currentPageIndex;
+
+            NextPage = CurrentPage;
+            CurrentPage = PreviousPage;
+            PreviousPage = null;
+
+            int currentIndexInCollection = currentPageIndex - 1;
 
             // If current element isn't the first one.
             if (currentIndexInCollection != 0)

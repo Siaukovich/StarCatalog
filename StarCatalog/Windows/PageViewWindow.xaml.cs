@@ -29,14 +29,19 @@ namespace StarCatalog.Windows
         {
             try
             {
-                int firtstPage = 1;
+                const int firtstPage = 1;
                 await ConstellationPagesManager.UpdateAsync(firtstPage);
-                UpdateButtonState();
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine(ex.Message);
+                this.Close();
+                MessageBox.Show(ex.Message);
+                return;
             }
+
+            UpdateButtonState();
+            ConstellationViewPage currentPage = ConstellationPagesManager.CurrentPage;
+            this.PageViewFrame.Navigate(currentPage);
         }
 
         private async void ToPreviousButton_Click(object sender, RoutedEventArgs e)
@@ -46,7 +51,7 @@ namespace StarCatalog.Windows
             ConstellationViewPage prevPage = ConstellationPagesManager.PreviousPage;
             this.PageViewFrame.Navigate(prevPage);
 
-            await ConstellationPagesManager.UpdateAsync(prevPageNumber);
+            await ConstellationPagesManager.UpdateToPrevAsync(prevPageNumber);
 
             ConstellationCollectionManager.Current = ConstellationPagesManager.CurrentPageNumber - 1;
             UpdateButtonState();
@@ -59,7 +64,7 @@ namespace StarCatalog.Windows
             ConstellationViewPage nextPage = ConstellationPagesManager.NextPage;
             this.PageViewFrame.Navigate(nextPage);
 
-            await ConstellationPagesManager.UpdateAsync(nextPageNumber);
+            await ConstellationPagesManager.UpdateToNextAsync(nextPageNumber);
 
             ConstellationCollectionManager.Current = ConstellationPagesManager.CurrentPageNumber + 1;
             UpdateButtonState();
@@ -67,6 +72,7 @@ namespace StarCatalog.Windows
 
         private void UpdateButtonState()
         {
+            // If prev page is null, disable "prev" button. Same for "next" button.
             this.ToPreviousButton.IsEnabled = ConstellationPagesManager.PreviousPage != null;
             this.ToNextButton.IsEnabled = ConstellationPagesManager.NextPage != null;
         }
