@@ -28,9 +28,9 @@ namespace StarCatalog
         public float OrbitRadius { get; set; }
 
         public string FullName => base.ToString() +
-                                  $"Period around planets axis in seconds: {SiderealDay}\n" +
-                                  $"Period around host star in seconds: {SiderealYear}\n" +
-                                  $"Radius of orbit in metres: {OrbitRadius}\n";
+                                  $"Period around axis: {SiderealDay:E2} s\n" +
+                                  $"Period around star: {SiderealYear:E2} s\n" +
+                                  $"Radius of orbit: {OrbitRadius} m\n";
 
         #endregion
 
@@ -57,10 +57,10 @@ namespace StarCatalog
         public override string ToString()
         {
             return base.ToString() +
-                   $"Period around planets axis in seconds: {SiderealDay}\n" +
-                   $"Period around host star in seconds: {SiderealYear}\n" +
+                   $"Period around axis: {SiderealDay:E2} s\n" +
+                   $"Period around star: {SiderealYear:E2} s\n" +
                    $"Host star: {Host.Name}\n" +
-                   $"Radius of orbit in metres: {OrbitRadius}\n";
+                   $"Radius of orbit: {OrbitRadius:E2} m\n";
         }
 
         public bool Equals(Planet other)

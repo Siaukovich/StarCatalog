@@ -100,8 +100,8 @@ namespace StarCatalog
         public override string ToString()
         {
             return $"Name: {Name}\n" +
-                   $"Radious in meteres: {Radius}\n" +
-                   $"Mass in kg: {Mass}\n";
+                   $"Radius: {Radius:E2} m\n" +
+                   $"Mass: {Mass:E2} kg\n";
         }
 
         #endregion

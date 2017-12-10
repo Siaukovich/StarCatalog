@@ -74,7 +74,6 @@
             <ListBox Grid.Row="1" Grid.RowSpan="2"
                      Grid.Column="0"
                      x:Name="ConstellationListBox"
-                     
                      VerticalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"
                      ScrollViewer.CanContentScroll="False">
@@ -150,7 +149,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" >
                 <DockPanel LastChildFill="True"
                            Margin="10 0 10 20">
                     <Label Content="Sort by"
@@ -180,13 +179,13 @@
                 <Button x:Name="PageViewButton"
                         Content="Page View"
                         Style="{StaticResource ButtonStyleUniversal}"
-                        Click="PageViewButton_OnClick"/>
-                
+                        Click="PageViewButton_OnClick" />
+
                 <Button x:Name="ExitButton"
                         Content="Close Star Catalog"
                         Style="{StaticResource ButtonStyleUniversal}"
-                        Click="ExitButton_OnClick">
-                </Button>
+                        Click="ExitButton_OnClick" />
+
             </StackPanel>
         </Grid>
     </DockPanel>

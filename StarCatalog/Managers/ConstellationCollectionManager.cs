@@ -235,6 +235,6 @@ namespace StarCatalog
             Current--;
         }
 
-        public static bool IsEmpty() => Constellations.Count == 0;
+        public static bool IsCollectionEmpty() => Constellations.Count == 0;
     }
 }

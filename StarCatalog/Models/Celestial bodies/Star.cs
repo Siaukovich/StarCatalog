@@ -91,8 +91,8 @@ namespace StarCatalog
         }
 
         public string FullName => base.ToString() +
-                                  $"Temprature in Kelvins: {Temperature}\n" +
-                                  $"Luminosity in Watts: {Luminosity}\n" +
+                                  $"Temprature: {Temperature:E2} K\n" +
+                                  $"Luminosity: {Luminosity:E2} W\n" +
                                   $"Type: {Type}\n";
 
         #endregion

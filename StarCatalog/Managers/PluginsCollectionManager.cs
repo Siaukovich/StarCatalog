@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace StarCatalog
 {
@@ -15,6 +14,7 @@ namespace StarCatalog
         public static async Task LoadPluginsAsync()
         {
             await Task.Delay(2000);
+
             var currentDirectory = Directory.GetCurrentDirectory();
             var location = Path.Combine(currentDirectory.Substring(0, currentDirectory.Length - "Debug\\bin\\".Length), "Plugins");
 
@@ -35,9 +35,9 @@ namespace StarCatalog
 
             var pluginType = typeof(IPluginable);
             var plugins = assemblies.SelectMany(assembly => assembly.GetTypes())
-                .Where(type => !type.IsInterface && !type.IsAbstract)
-                .Where(type => type.GetInterface(pluginType.FullName) != null)
-                .Select(type => Activator.CreateInstance(type) as IPluginable);
+                                    .Where(type => !type.IsInterface && !type.IsAbstract)
+                                    .Where(type => type.GetInterface(pluginType.FullName) != null)
+                                    .Select(type => Activator.CreateInstance(type) as IPluginable);
 
             Plugins = plugins.ToDictionary(p => p.Name);
         }

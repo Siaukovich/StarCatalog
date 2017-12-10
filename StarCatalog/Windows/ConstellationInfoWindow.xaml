@@ -45,12 +45,12 @@
                         <WrapPanel HorizontalAlignment="Center">
                             
                             <Button x:Name="AddPlanetButton"
-                                    Content="Add a planet"
+                                    Content="Add planet"
                                     Style="{StaticResource ButtonStyleUniversal}" 
                                     Click="AddPlanetButton_OnClick"/>
 
                             <Button x:Name="AddStarButton"
-                                    Content="Add a star"
+                                    Content="Add star"
                                     Style="{StaticResource ButtonStyleUniversal}"
                                     Click="AddStarButton_OnClick"/>
 

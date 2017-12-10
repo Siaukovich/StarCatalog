@@ -57,8 +57,11 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\ConstellationChecker.cs" />
     <Compile Include="Helpers\IPluginable.cs" />
+    <Compile Include="Helpers\ConstellationPage.cs" />
     <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\InfoStateController.cs" />
+    <Compile Include="Helpers\StarsCurrentPage.cs" />
+    <Compile Include="Managers\ConstellationPagesManager.cs" />
     <Compile Include="Managers\WindowsManager.cs" />
     <Compile Include="Windows\AddConstellationWindow.xaml.cs">
       <DependentUpon>AddConstellationWindow.xaml</DependentUpon>
@@ -71,6 +74,9 @@
     <Compile Include="Helpers\StarsCurrent.cs" />
     <Compile Include="Managers\ConstellationCollectionManager.cs" />
     <Compile Include="Managers\PluginsCollectionManager.cs" />
+    <Compile Include="Windows\ConstellationViewPage.xaml.cs">
+      <DependentUpon>ConstellationViewPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PageViewWindow.xaml.cs">
       <DependentUpon>PageViewWindow.xaml</DependentUpon>
     </Compile>
@@ -87,6 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ConstellationInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ConstellationViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

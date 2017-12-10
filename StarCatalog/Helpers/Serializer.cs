@@ -24,10 +24,5 @@ namespace StarCatalog
                 using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
                     return (T)ds.ReadObject(deflateStream);
         }
-
-        public static void SerializeCollectionJson(IEnumerable collection, string fullPathToFile)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -5,36 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StarCatalog.Windows"
         mc:Ignorable="d"
-        Title="Page View" Height="400" Width="500">
-    <Grid>
+        Title="Page View" Height="500" Width="850">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition />
             <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        
-        <Frame></Frame>
-        
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal">
-            <Button x:Name="FirstElementButton"
-                    Content="First"
-                    Style="{StaticResource ButtonStyleUniversal}" />
-            
-            <Button x:Name="PreviousElementButton"
-                    Content="Previous"
-                    Style="{StaticResource ButtonStyleUniversal}" />
-            
-            <Button x:Name="NextElementButton"
-                    Content="Next"
-                    Style="{StaticResource ButtonStyleUniversal}" />
-            
-            <Button x:Name="LastElementButton"
-                    Content="Last"
-                    Style="{StaticResource ButtonStyleUniversal}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
 
-            <Button x:Name="RandomElementButton"
-                    Content="Random"
-                    Style="{StaticResource ButtonStyleUniversal}" />
-        </StackPanel>
+        <TextBlock Grid.Column="1" 
+                   Text="{Binding Name}" 
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+
+        <ComboBox x:Name="TypeComboBox"
+                  Grid.Column="3" Grid.Row="1"
+                  Margin="10"
+                  Padding="5"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Stretch" >
+            <ComboBoxItem Content="Constellations"
+                          IsSelected="True"/>
+            <ComboBoxItem Content="Stars" />
+        </ComboBox>
+
+        
+
+        <Border Margin="5"
+                BorderThickness="2"
+                BorderBrush="Gray"
+                Grid.Row="1" Grid.Column="1"
+                Grid.RowSpan="2" Grid.ColumnSpan="2"
+                CornerRadius="10" >
+            
+            <Frame x:Name="PageViewFrame"
+                   NavigationUIVisibility="Hidden"
+                    />
+
+        </Border>
+
+        <Button x:Name="ToPreviousButton" 
+                Grid.Row="1" Grid.Column="0"
+                Content="Prev"
+                Style="{StaticResource ButtonStyleUniversal}"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Center" Click="ToPreviousButton_Click"/>
+
+        <Button x:Name="ToNextButton" 
+                Grid.Row="1" Grid.Column="3"
+                Content="Next"
+                Style="{StaticResource ButtonStyleUniversal}"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Center" Click="ToNextButton_Click"/>
+
+
     </Grid>
 </Window>

@@ -135,7 +135,7 @@ namespace StarCatalog
 
         private void RemoveAllButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ConstellationCollectionManager.IsEmpty())
+            if (ConstellationCollectionManager.IsCollectionEmpty())
             {
                 MessageBox.Show("Collection is already empty!", "Oops", MessageBoxButton.OK);
                 return;
@@ -272,6 +272,14 @@ namespace StarCatalog
             return true;
         }
 
+        private void PageViewButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            WindowsManager.StoreWindow(this);
+            this.Hide();
+            var pageViewWindow = new PageViewWindow();
+            pageViewWindow.Show();
+        }
+
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (!InfoStateController.InfoWasChanged)
@@ -309,14 +317,6 @@ namespace StarCatalog
                     break;
                 }
             }
-        }
-
-        private void PageViewButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            WindowsManager.StoreWindow(this);
-            this.Hide();
-            var pageViewWindow = new PageViewWindow();
-            pageViewWindow.Show();
         }
     }
 }
