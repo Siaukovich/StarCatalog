@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 
 namespace StarCatalog
 {
@@ -129,8 +126,16 @@ namespace StarCatalog
 
         public static List<Star> GetAllStars()
         {
-            var sw = new Stopwatch(); // For debug, to see benefits of PLINQ.
-            sw.Start();
+            return Constellations.AsParallel()
+                                 .SelectMany(constellation => constellation.Stars)
+                                 .OrderBy(star => star.Name)
+                                 .ToList();
+        }
+
+        public static List<Star> GetAllStarsWithParallel()
+        {
+            //var sw = new Stopwatch(); // For debug, to see benefits of PLINQ.
+            //sw.Start();
             var a = Constellations.AsParallel()
                                   .SelectMany(constellation =>
                                   {
@@ -139,17 +144,17 @@ namespace StarCatalog
                                   })
                                   .OrderBy(star => star.Name)
                                   .ToList();
-            sw.Stop();
+            //sw.Stop();
 
             // For debug, to see benefits of PLINQ.
-            MessageBox.Show(sw.Elapsed.TotalSeconds.ToString(CultureInfo.CurrentCulture));
+            //MessageBox.Show(sw.Elapsed.TotalSeconds.ToString(CultureInfo.CurrentCulture));
 
             return a;
         }
 
         public static List<Planet> GetAllPlanets()
         {
-            return GetAllStars()
+            return GetAllStarsWithParallel()
                   .AsParallel()
                   .SelectMany(star => star.Planets)
                   .OrderBy(planet => planet.Name)
@@ -167,7 +172,7 @@ namespace StarCatalog
         public static List<Star> GetStarByNameStart(string nameStart)
         {
             nameStart = nameStart.ToLower();
-            return GetAllStars().AsParallel()
+            return GetAllStarsWithParallel().AsParallel()
                                 .Where(star => star.Name.ToLower().StartsWith(nameStart))
                                 .ToList();
         }
@@ -183,7 +188,7 @@ namespace StarCatalog
 
         public static List<Star> GetStarsGroupedByConstellation()
         {
-            return GetAllStars().GroupBy(s => s.Host.Name)
+            return GetAllStarsWithParallel().GroupBy(s => s.Host.Name)
                                 .SelectMany(s => s)
                                 .ToList();
         }

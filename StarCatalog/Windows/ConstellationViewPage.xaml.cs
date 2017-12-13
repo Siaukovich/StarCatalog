@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace StarCatalog
 {
@@ -12,7 +11,6 @@ namespace StarCatalog
         {
             ConstellationCollectionManager.Current = pageIndex - 1;
             InitializeComponent();
-            this.DataContext = null;
             this.DataContext = ConstellationCollectionManager.Constellations[pageIndex - 1];
         }
     }

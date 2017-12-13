@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization;
-using System.Xml;
 
 namespace StarCatalog
 {

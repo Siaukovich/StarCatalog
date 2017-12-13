@@ -32,14 +32,17 @@
 
         <StackPanel VerticalAlignment="Top">
             <TextBlock Text="{Binding Name}"
-                        HorizontalAlignment="Center"
-                        FontWeight="Medium"
-                        FontSize="18"
-                        Margin="10"
-                        Foreground="LightSlateGray" />
+                       HorizontalAlignment="Center"
+                       FontWeight="Medium"
+                       FontSize="18"
+                       Margin="15"
+                       Foreground="LightSlateGray" />
 
             <Image Source="{Binding ImageUri}" 
-                    Margin="0 7"/>
+                   Margin="0 5"
+                   MaxHeight="300"
+                   MaxWidth="270"
+                   HorizontalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1">

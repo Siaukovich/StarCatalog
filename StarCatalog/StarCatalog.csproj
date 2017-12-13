@@ -57,11 +57,12 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\ConstellationChecker.cs" />
     <Compile Include="Helpers\IPluginable.cs" />
-    <Compile Include="Helpers\ConstellationPage.cs" />
     <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\InfoStateController.cs" />
-    <Compile Include="Helpers\StarsCurrentPage.cs" />
-    <Compile Include="Managers\ConstellationPagesManager.cs" />
+    <Compile Include="Managers\Pages Managers\ConstellationPagesManager.cs" />
+    <Compile Include="Managers\Pages Managers\IAsyncPageManager.cs" />
+    <Compile Include="Managers\Pages Managers\AsyncPageManager.cs" />
+    <Compile Include="Managers\Pages Managers\StarPagesManager.cs" />
     <Compile Include="Managers\WindowsManager.cs" />
     <Compile Include="Windows\AddConstellationWindow.xaml.cs">
       <DependentUpon>AddConstellationWindow.xaml</DependentUpon>
@@ -77,8 +78,12 @@
     <Compile Include="Windows\ConstellationViewPage.xaml.cs">
       <DependentUpon>ConstellationViewPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Managers\Pages Managers\PageViewWindow.CurrentManager.cs" />
     <Compile Include="Windows\PageViewWindow.xaml.cs">
       <DependentUpon>PageViewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StarViewPage.xaml.cs">
+      <DependentUpon>StarViewPage.xaml</DependentUpon>
     </Compile>
     <Page Include="Windows\AddConstellationWindow.xaml">
       <SubType>Designer</SubType>
@@ -128,6 +133,10 @@
     <Page Include="Windows\PageViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StarViewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

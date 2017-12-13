@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace StarCatalog.Windows
 {
@@ -20,61 +10,95 @@ namespace StarCatalog.Windows
     /// </summary>
     public partial class PageViewWindow : Window
     {
-        public PageViewWindow()
+        public PageViewWindow(IAsyncPageManager pageManager)
         {
             InitializeComponent();
+            CurrentManager.Instance = pageManager;
+            SetUp();
         }
 
-        protected override async void OnActivated(EventArgs e)
+        private void SetUp()
         {
-            try
-            {
-                const int firtstPage = 1;
-                await ConstellationPagesManager.UpdateAsync(firtstPage);
-            }
-            catch (InvalidOperationException ex)
-            {
-                this.Close();
-                MessageBox.Show(ex.Message);
-                return;
-            }
-
-            UpdateButtonState();
-            ConstellationViewPage currentPage = ConstellationPagesManager.CurrentPage;
-            this.PageViewFrame.Navigate(currentPage);
-        }
-
-        private async void ToPreviousButton_Click(object sender, RoutedEventArgs e)
-        {
-            int prevPageNumber = ConstellationPagesManager.CurrentPageNumber - 1;
-
-            ConstellationViewPage prevPage = ConstellationPagesManager.PreviousPage;
-            this.PageViewFrame.Navigate(prevPage);
-
-            await ConstellationPagesManager.UpdateToPrevAsync(prevPageNumber);
-
-            ConstellationCollectionManager.Current = ConstellationPagesManager.CurrentPageNumber - 1;
+            this.PageViewFrame.Navigate(CurrentManager.Instance);
             UpdateButtonState();
         }
 
         private async void ToNextButton_Click(object sender, RoutedEventArgs e)
         {
-            int nextPageNumber = ConstellationPagesManager.CurrentPageNumber + 1;
-
-            ConstellationViewPage nextPage = ConstellationPagesManager.NextPage;
+            Page nextPage = CurrentManager.Instance.NextPage;
             this.PageViewFrame.Navigate(nextPage);
 
-            await ConstellationPagesManager.UpdateToNextAsync(nextPageNumber);
+            this.ToNextButton.IsEnabled = false;
 
-            ConstellationCollectionManager.Current = ConstellationPagesManager.CurrentPageNumber + 1;
+            await CurrentManager.Instance.ShiftToNextPageAsync();
+
+            UpdateButtonState();
+        }
+
+        private async void ToPreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            Page previousPage = CurrentManager.Instance.PreviousPage;
+            this.PageViewFrame.Navigate(previousPage);
+
+            this.ToPreviousButton.IsEnabled = false;
+
+            await CurrentManager.Instance.ShiftToPreviousAsync();
+
+            UpdateButtonState();
+        }
+
+        private async void ToFirstButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Page firstPage = CurrentManager.Instance.FirstPage;
+            this.PageViewFrame.Navigate(firstPage);
+
+            this.ToPreviousButton.IsEnabled = false;
+            this.ToNextButton.IsEnabled = false;
+
+            await CurrentManager.Instance.MoveToFirstAsync();
+
+            UpdateButtonState();
+        }
+
+        private async void ToLastButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Page lastPage = CurrentManager.Instance.LastPage;
+            this.PageViewFrame.Navigate(lastPage);
+
+            this.ToPreviousButton.IsEnabled = false;
+            this.ToNextButton.IsEnabled = false;
+
+            await CurrentManager.Instance.MoveToLastAsync();
+
             UpdateButtonState();
         }
 
         private void UpdateButtonState()
         {
             // If prev page is null, disable "prev" button. Same for "next" button.
-            this.ToPreviousButton.IsEnabled = ConstellationPagesManager.PreviousPage != null;
-            this.ToNextButton.IsEnabled = ConstellationPagesManager.NextPage != null;
+            this.ToPreviousButton.IsEnabled = (CurrentManager.Instance.PreviousPage != null);
+            this.ToNextButton.IsEnabled = (CurrentManager.Instance.NextPage != null);
+            
+            this.ToFirstButton.IsEnabled = this.ToPreviousButton.IsEnabled;
+            this.ToLastButton.IsEnabled = this.ToNextButton.IsEnabled;
+        }
+
+        private void TypeComboBox_OnDropDownClosed(object sender, EventArgs e)
+        {
+            var text = this.TypeComboBox.Text;
+
+            if (text == "Stars" && !(CurrentManager.Instance is StarPagesManager))
+            {
+                var starsList = ConstellationCollectionManager.GetAllStarsWithParallel().ToList();
+                CurrentManager.Instance = new StarPagesManager(starsList);
+            }
+            else if (text == "Constellations" && !(CurrentManager.Instance is ConstellationPagesManager))
+            {
+                var constellationList = ConstellationCollectionManager.Constellations.ToList();
+                CurrentManager.Instance = new ConstellationPagesManager(constellationList);
+            }
+
+            this.ToFirstButton_OnClick(sender, new RoutedEventArgs());
         }
 
         protected override void OnClosed(EventArgs e)

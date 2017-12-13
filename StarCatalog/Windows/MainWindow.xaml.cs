@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -127,7 +126,7 @@ namespace StarCatalog
             }
             else if (typeList == "star") /// TODO. Now it's disabling combobox.
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetAllStars());
+                LoadCollectionToListBox(ConstellationCollectionManager.GetAllStarsWithParallel());
             }
 
             LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy(optionSort));
@@ -276,7 +275,9 @@ namespace StarCatalog
         {
             WindowsManager.StoreWindow(this);
             this.Hide();
-            var pageViewWindow = new PageViewWindow();
+            var constellationList = ConstellationCollectionManager.Constellations.ToList();
+            var pageManager = new ConstellationPagesManager(constellationList);
+            var pageViewWindow = new PageViewWindow(pageManager);
             pageViewWindow.Show();
         }
 

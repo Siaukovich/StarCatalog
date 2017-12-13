@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace StarCatalog
+﻿namespace StarCatalog
 {
     public interface IPluginable
     {

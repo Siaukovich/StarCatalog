@@ -9,9 +9,10 @@
         Title="Star catalog" 
         Height="500" Width="700" 
         MinWidth="650"
-        MinHeight="330">
-    <DockPanel >
-        <Menu DockPanel.Dock="Top">
+        MinHeight="330" >
+    <DockPanel>
+        <Menu DockPanel.Dock="Top"
+              Background="{Binding ElementName=Window, Path=Background}" >
             <MenuItem Header="File">
                 <MenuItem Header="Create new constellation"
                           Click="AddConstellationButton_OnClick"/>
@@ -30,6 +31,9 @@
                       x:Name="PluginsMenuItem" 
                       Click="PluginsMenuItem_OnClick"/>
         </Menu>
+        
+        <Separator DockPanel.Dock="Top"
+                   Foreground="LightYellow"/>
 
         <Grid Margin="10">
             <!--Сетка 2 колонки x 3 ряда-->

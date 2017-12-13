@@ -30,7 +30,8 @@
                   Margin="10"
                   Padding="5"
                   VerticalAlignment="Top"
-                  HorizontalAlignment="Stretch" >
+                  HorizontalAlignment="Stretch" 
+                  DropDownClosed="TypeComboBox_OnDropDownClosed">
             <ComboBoxItem Content="Constellations"
                           IsSelected="True"/>
             <ComboBoxItem Content="Stars" />
@@ -56,15 +57,32 @@
                 Content="Prev"
                 Style="{StaticResource ButtonStyleUniversal}"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Center" Click="ToPreviousButton_Click"/>
+                HorizontalAlignment="Right" 
+                Click="ToPreviousButton_Click"/>
+        
+        <Button x:Name="ToFirstButton"
+                Grid.Row="2" Grid.Column="0"
+                Content="First"
+                Style="{StaticResource ButtonStyleUniversal}"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Click="ToFirstButton_OnClick"/>
 
+        
         <Button x:Name="ToNextButton" 
                 Grid.Row="1" Grid.Column="3"
                 Content="Next"
                 Style="{StaticResource ButtonStyleUniversal}"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Center" Click="ToNextButton_Click"/>
+                HorizontalAlignment="Left" 
+                Click="ToNextButton_Click"/>
 
-
+        <Button x:Name="ToLastButton"
+                Grid.Row="2" Grid.Column="3"
+                Content="Last"
+                Style="{StaticResource ButtonStyleUniversal}"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Click="ToLastButton_OnClick"/>
     </Grid>
 </Window>
