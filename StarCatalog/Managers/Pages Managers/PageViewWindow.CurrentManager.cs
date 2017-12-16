@@ -2,9 +2,9 @@
 {
     public partial class PageViewWindow
     {
-        private static class CurrentManager
+        private static class CurrentPageManager
         {
-            public static IAsyncPageManager Instance { get; set; }
+            public static AsyncPageManager Instance { get; set; }
         }
     }
 }

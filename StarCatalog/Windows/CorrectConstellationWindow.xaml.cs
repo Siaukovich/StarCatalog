@@ -16,7 +16,7 @@ namespace StarCatalog.Windows
         public CorrectConstellationWindow()
         {
             InitializeComponent();
-            var currectConstellation = ConstellationCollectionManager.GetCurrectConstellation();
+            var currectConstellation = CollectionManager.GetCurrectConstellation();
             this.Image.Source = new BitmapImage(new Uri(currectConstellation.ImageUri, UriKind.RelativeOrAbsolute));
             this.DataContext = new ConstellationChecker
             {
@@ -37,7 +37,7 @@ namespace StarCatalog.Windows
                 return;
 
             var imageUri = openFileDialog.FileName;
-            ConstellationCollectionManager.GetCurrectConstellation().ImageUri = imageUri;
+            CollectionManager.GetCurrectConstellation().ImageUri = imageUri;
             this.Image.Source = new BitmapImage(new Uri(imageUri));
         }
 
@@ -60,7 +60,7 @@ namespace StarCatalog.Windows
                 return;
             }
 
-            var currentConstellation = ConstellationCollectionManager.GetCurrectConstellation();
+            var currentConstellation = CollectionManager.GetCurrectConstellation();
 
             currentConstellation.Name = this.NameTextBox.Text;
             currentConstellation.Coordinates = new Coordinates

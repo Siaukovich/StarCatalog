@@ -31,7 +31,7 @@ namespace SaveBinaryPlugin
             }
 
             var fullPathToFile = saveFileDialog.FileName;
-            SerializeCollectionXml(ConstellationCollectionManager.Constellations, fullPathToFile);
+            SerializeCollectionXml(CollectionManager.Constellations, fullPathToFile);
             InfoStateController.Reset();
         }
 

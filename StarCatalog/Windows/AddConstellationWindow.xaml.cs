@@ -42,7 +42,7 @@ namespace StarCatalog.Windows
                 };
                 constellation.ImageUri = _pictureUri;
 
-                ConstellationCollectionManager.AddConstellation(constellation);
+                CollectionManager.AddConstellation(constellation);
 
                 MessageBox.Show("Successfully added!", "Success!", MessageBoxButton.OK);
 

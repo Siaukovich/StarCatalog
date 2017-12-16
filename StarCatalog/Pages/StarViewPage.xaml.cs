@@ -10,7 +10,7 @@ namespace StarCatalog
         public StarViewPage(int pageIndex)
         {
             InitializeComponent();
-            var stars = ConstellationCollectionManager.GetAllStars();
+            var stars = CollectionManager.GetAllStars();
             var star = stars[pageIndex - 1];
             this.DataContext = star;
             this.PlanetListBox.ItemsSource = star.Planets;

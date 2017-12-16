@@ -1,39 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace StarCatalog
 {
-    abstract class AsyncPageManager<T> : IAsyncPageManager 
+    public abstract class AsyncPageManager
     {
-        public Page CurrentPage  { get; set; }
-        public Page NextPage     { get; set; }
+        public Page CurrentPage { get; set; }
+        public Page NextPage { get; set; }
         public Page PreviousPage { get; set; }
-        public Page FirstPage    { get; set; }
-        public Page LastPage     { get; set; }
+        public Page FirstPage { get; set; }
+        public Page LastPage { get; set; }
 
         public int CurrentPageNumber { get; set; }
 
-        protected readonly List<T> Collection;
+        protected readonly IList Collection;
 
-        protected AsyncPageManager(List<T> collection)
+        protected AsyncPageManager(IList collection)
         {
             this.Collection = collection;
         }
 
-        public abstract Task ShiftToNextPageAsync();
-        public abstract Task ShiftToPreviousAsync();
-        public abstract Task MoveToFirstAsync();
-        public abstract Task MoveToLastAsync();
+        public abstract Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler);
+        public abstract Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler);
+        public abstract Task MoveToFirstAsync(TaskScheduler uiTaskScheduler);
+        public abstract Task MoveToLastAsync(TaskScheduler uiTaskScheduler);
 
         protected void ShiftToNext()
         {
-            Thread.Sleep(500);
-
-            if (this.CurrentPageNumber == this.Collection.Count)
-                return;
-
             this.PreviousPage = this.CurrentPage;
             this.CurrentPage = this.NextPage;
             this.NextPage = null;
@@ -43,11 +38,6 @@ namespace StarCatalog
 
         protected void ShiftToPrevious()
         {
-            Thread.Sleep(500);
-
-            if (this.CurrentPageNumber == 1)
-                return;
-
             this.NextPage = this.CurrentPage;
             this.CurrentPage = this.PreviousPage;
             this.PreviousPage = null;
@@ -57,11 +47,6 @@ namespace StarCatalog
 
         protected void MoveToFirst()
         {
-            Thread.Sleep(500);
-
-            if (CurrentPageNumber == 1)
-                return;
-
             this.CurrentPage = FirstPage;
             this.PreviousPage = null;
             this.NextPage = null;
@@ -71,11 +56,6 @@ namespace StarCatalog
 
         protected void MoveToLast()
         {
-            Thread.Sleep(500);
-            
-            if (CurrentPageNumber == this.Collection.Count)
-                return;
-
             this.CurrentPage = LastPage;
             this.PreviousPage = null;
             this.NextPage = null;

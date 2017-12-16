@@ -35,7 +35,7 @@ namespace StarCatalog.Windows
                 s.Mass = Convert.ToDouble(this.MassTextBox.Text);
                 s.Temperature = Convert.ToDouble(this.TemperatureTextBox.Text);
 
-                ConstellationCollectionManager.GetCurrectConstellation().AddStar(s);
+                CollectionManager.GetCurrectConstellation().AddStar(s);
 
                 MessageBox.Show("Successfully added!", "Success!", MessageBoxButton.OK);
 

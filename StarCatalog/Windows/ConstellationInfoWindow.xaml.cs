@@ -19,7 +19,7 @@ namespace StarCatalog
         {
             this.ItemsControl.ItemsSource = new List<Constellation>
             {
-                ConstellationCollectionManager.GetCurrectConstellation()
+                CollectionManager.GetCurrectConstellation()
             };
         }
 
@@ -35,7 +35,7 @@ namespace StarCatalog
 
         private void AddPlanetButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ConstellationCollectionManager.GetCurrentStars().Count == 0)
+            if (CollectionManager.GetCurrentStars().Count == 0)
             {
                 MessageBox.Show("You should add stars before adding planets!", "No stars", MessageBoxButton.OK);
                 return;

@@ -9,9 +9,9 @@ namespace StarCatalog
     {
         public ConstellationViewPage(int pageIndex)
         {
-            ConstellationCollectionManager.Current = pageIndex - 1;
+            CollectionManager.Current = pageIndex - 1;
             InitializeComponent();
-            this.DataContext = ConstellationCollectionManager.Constellations[pageIndex - 1];
+            this.DataContext = CollectionManager.Constellations[pageIndex - 1];
         }
     }
 }

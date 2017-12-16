@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StarCatalog
 {
-    class ConstellationPagesManager : AsyncPageManager<Constellation>
+    class ConstellationPagesManager : AsyncPageManager
     {
         public ConstellationPagesManager(List<Constellation> collection) : base(collection)
         {
@@ -20,69 +20,58 @@ namespace StarCatalog
             this.NextPage = new ConstellationViewPage(CurrentPageNumber + 1);
         }
 
-        public override Task ShiftToNextPageAsync()
+        public override Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
+            this.ShiftToNext(); // NextPage is null after that.
 
-                this.ShiftToNext(); // NextPage is null after that.
-
-                if (this.CurrentPageNumber == this.Collection.Count)
-                    return;
-
-                this.NextPage = new ConstellationViewPage(this.CurrentPageNumber + 1);
-
-                ConstellationCollectionManager.Current = this.CurrentPageNumber + 1;
-
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            if (this.CurrentPageNumber == this.Collection.Count)
+                return Task.CompletedTask;
+            
+            return Task.Run(async () => this.NextPage = await this.LoadNextPageAsync(uiTaskScheduler));
         }
 
-        public override Task ShiftToPreviousAsync()
+        public override Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.ShiftToPrevious(); // PreviousPage is null after that.
+            this.ShiftToPrevious(); // PreviousPage is null after that.
 
-                if (this.CurrentPageNumber == 1)
-                    return;
+            if (this.CurrentPageNumber == 1)
+                return Task.CompletedTask;
 
-                this.PreviousPage = new ConstellationViewPage(this.CurrentPageNumber - 1);
-
-                ConstellationCollectionManager.Current = this.CurrentPageNumber - 1;
-
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            return Task.Run(async () => this.PreviousPage = await this.LoadNextPageAsync(uiTaskScheduler));
         }
 
-        public override Task MoveToFirstAsync()
+        public override Task MoveToFirstAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.MoveToFirst(); // PreviousPage and NextPage is null after that.
+            this.MoveToFirst(); // PreviousPage and NextPage is null after that.
 
-                if (this.Collection.Count == 1)
-                    return;
+            if (this.Collection.Count == 1)
+                return Task.CompletedTask;
 
-                this.NextPage = new ConstellationViewPage(this.CurrentPageNumber + 1);
-
-                ConstellationCollectionManager.Current = 0;
-
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            return Task.Run(async () => this.NextPage = await this.LoadNextPageAsync(uiTaskScheduler));
         }
 
-        public override Task MoveToLastAsync()
+        public override Task MoveToLastAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.MoveToLast(); // PreviousPage and NextPage is null after that.
+            MoveToLast(); // PreviousPage and NextPage is null after that.
 
-                if (this.Collection.Count == 1)
-                    return;
+            if (this.Collection.Count == 1) 
+                return Task.CompletedTask;
 
-                this.PreviousPage = new ConstellationViewPage(this.CurrentPageNumber - 1);
+            return Task.Run(async () => this.PreviousPage = await this.LoadNextPageAsync(uiTaskScheduler));
+        }
 
-                ConstellationCollectionManager.Current = this.CurrentPageNumber - 1;
+        protected Task<ConstellationViewPage> LoadNextPageAsync(TaskScheduler taskScheduler)
+        {
+            return Task.Factory.StartNew(
+                () => new ConstellationViewPage(this.CurrentPageNumber + 1),
+                CancellationToken.None, TaskCreationOptions.None, taskScheduler);
+        }
 
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+        protected Task<ConstellationViewPage> LoadPreviousPage(TaskScheduler taskScheduler)
+        {
+           return Task.Factory.StartNew(
+                () =>new ConstellationViewPage(this.CurrentPageNumber - 1),
+                CancellationToken.None, TaskCreationOptions.None, taskScheduler);
         }
     }
 }

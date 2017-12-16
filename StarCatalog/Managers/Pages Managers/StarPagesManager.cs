@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StarCatalog
 {
-    class StarPagesManager : AsyncPageManager<Star>
+    class StarPagesManager : AsyncPageManager
     {
         public StarPagesManager(List<Star> collection) : base(collection)
         {
@@ -20,62 +20,73 @@ namespace StarCatalog
             this.NextPage = new StarViewPage(CurrentPageNumber + 1);
         }
 
-        public override Task ShiftToNextPageAsync()
+        public override async Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.ShiftToNext(); // NextPage is null after that.
+            this.ShiftToNext(); // NextPage is null after that.
 
-                if (this.CurrentPageNumber == this.Collection.Count)
-                    return;
+            if (this.CurrentPageNumber == this.Collection.Count)
+                return;
 
-                this.NextPage = new StarViewPage(this.CurrentPageNumber + 1);
-               
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            this.NextPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber + 1),
+                CancellationToken.None, TaskCreationOptions.None, uiTaskScheduler);
         }
 
-        public override Task ShiftToPreviousAsync()
+        public override async Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.ShiftToPrevious(); // PreviousPage is null after that.
+            this.ShiftToPrevious(); // PreviousPage is null after that.
 
-                if (this.CurrentPageNumber == 1)
-                    return;
+            if (this.CurrentPageNumber == 1)
+                return;
 
-                this.PreviousPage = new StarViewPage(this.CurrentPageNumber - 1);
+            this.NextPage = await Task.Factory.StartNew(
+                () => new ConstellationViewPage(this.CurrentPageNumber + 1),
+                CancellationToken.None, TaskCreationOptions.None, uiTaskScheduler);
 
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-
+            this.PreviousPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber - 1),
+                CancellationToken.None, TaskCreationOptions.None, uiTaskScheduler);
         }
 
-        public override Task MoveToFirstAsync()
+        public override async Task MoveToFirstAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.MoveToFirst(); // PreviousPage and NextPage is null after that.
+            this.MoveToFirst(); // PreviousPage and NextPage is null after that.
 
-                if (this.Collection.Count == 1)
-                    return;
+            if (this.Collection.Count == 1)
+                return;
 
-                this.NextPage = new StarViewPage(this.CurrentPageNumber + 1);
+            if (this.Collection.Count == 1)
+                return;
 
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            this.NextPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber + 1),
+                CancellationToken.None, TaskCreationOptions.None, uiTaskScheduler);
         }
 
-        public override Task MoveToLastAsync()
+        public override async Task MoveToLastAsync(TaskScheduler uiTaskScheduler)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                this.MoveToLast(); // PreviousPage and NextPage is null after that.
+            MoveToLast();
 
-                if (this.Collection.Count == 1)
-                    return;
+            if (this.Collection.Count == 1) // PreviousPage and NextPage is null after that.
+                return;
 
-                this.PreviousPage = new StarViewPage(this.CurrentPageNumber - 1);
+            this.PreviousPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber - 1),
+                CancellationToken.None, TaskCreationOptions.None, uiTaskScheduler);
+        }
 
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-            
+         protected async void LoadNextPageAsync(TaskScheduler taskScheduler)
+        {
+            this.NextPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber + 1),
+                CancellationToken.None, TaskCreationOptions.None, taskScheduler);
+        }
+
+        protected async void LoadPreviousPageAsync(TaskScheduler taskScheduler)
+        {
+            this.PreviousPage = await Task.Factory.StartNew(
+                () => new StarViewPage(this.CurrentPageNumber - 1),
+                CancellationToken.None, TaskCreationOptions.None, taskScheduler);
         }
     }
 }

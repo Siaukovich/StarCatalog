@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace StarCatalog
 {
-    public static class ConstellationCollectionManager
+    public static class CollectionManager
     {
         #region Collection
 
@@ -18,7 +18,7 @@ namespace StarCatalog
 
         #endregion
 
-        static ConstellationCollectionManager()
+        static CollectionManager()
         {
             Constellations = new ObservableCollection<Constellation>();
             Constellations.CollectionChanged += (s, e) =>

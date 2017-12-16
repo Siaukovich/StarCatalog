@@ -50,8 +50,8 @@ namespace LoadFilePlugin
                 return;
             }
 
-            ConstellationCollectionManager.ClearCollection();
-            ConstellationCollectionManager.AddRange(collection);
+            CollectionManager.ClearCollection();
+            CollectionManager.AddRange(collection);
             InfoStateController.Reset();
         }
 

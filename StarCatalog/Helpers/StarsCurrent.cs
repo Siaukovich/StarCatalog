@@ -4,6 +4,6 @@ namespace StarCatalog
 {
     class StarsCurrent : List<Star>
     {
-        public StarsCurrent() => this.AddRange(ConstellationCollectionManager.GetCurrentStars());
+        public StarsCurrent() => this.AddRange(CollectionManager.GetCurrentStars());
     }
 }

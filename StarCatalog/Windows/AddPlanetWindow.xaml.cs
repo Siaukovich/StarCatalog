@@ -13,7 +13,7 @@ namespace StarCatalog
         public AddPlanetWindow()
         {
             InitializeComponent();
-            this.StarNameComboBox.ItemsSource = ConstellationCollectionManager.GetCurrentStars();
+            this.StarNameComboBox.ItemsSource = CollectionManager.GetCurrentStars();
             this.DataContext = new Planet();
         }
         
@@ -44,7 +44,7 @@ namespace StarCatalog
                 p.SiderealDay = Convert.ToSingle(this.SideralDayTextBox.Text);
                 p.SiderealYear = Convert.ToSingle(this.SiderealYearTextBox.Text);
 
-                foreach (var star in ConstellationCollectionManager.GetCurrentStars())
+                foreach (var star in CollectionManager.GetCurrentStars())
                 {
                     if (star.Name != StarNameComboBox.Text)
                         continue;

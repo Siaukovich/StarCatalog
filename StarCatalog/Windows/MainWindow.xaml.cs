@@ -19,7 +19,7 @@ namespace StarCatalog
         public MainWindow()
         {
             InitializeComponent();
-            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
             this.Show();
             LoadPlugins();
         }
@@ -87,7 +87,7 @@ namespace StarCatalog
 
         protected override void OnActivated(EventArgs e)
         {
-            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
             this.SortTypeComboBox.Text = "Name";
         }
 
@@ -95,19 +95,19 @@ namespace StarCatalog
         {
             var nameStart = this.SearchByNameTextBox.Text;
             if (nameStart == String.Empty)
-                LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+                LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
 
             var optionType = this.SearchTypeComboBox.Text;
             switch (optionType)
             {
                 case "constellation":
-                    LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationByNameStart(nameStart));
+                    LoadCollectionToListBox(CollectionManager.GetConstellationByNameStart(nameStart));
                     break;
                 case "star":
-                    LoadCollectionToListBox(ConstellationCollectionManager.GetStarByNameStart(nameStart));
+                    LoadCollectionToListBox(CollectionManager.GetStarByNameStart(nameStart));
                     break;
                 case "planet":
-                    LoadCollectionToListBox(ConstellationCollectionManager.GetPlanetByNameStart(nameStart));
+                    LoadCollectionToListBox(CollectionManager.GetPlanetByNameStart(nameStart));
                     break;
             }
         }
@@ -122,19 +122,19 @@ namespace StarCatalog
 
             if (typeList == "constellation")
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.Constellations);
+                LoadCollectionToListBox(CollectionManager.Constellations);
             }
             else if (typeList == "star") /// TODO. Now it's disabling combobox.
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetAllStarsWithParallel());
+                LoadCollectionToListBox(CollectionManager.GetAllStarsWithParallel());
             }
 
-            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy(optionSort));
+            LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy(optionSort));
         }
 
         private void RemoveAllButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ConstellationCollectionManager.IsCollectionEmpty())
+            if (CollectionManager.IsCollectionEmpty())
             {
                 MessageBox.Show("Collection is already empty!", "Oops", MessageBoxButton.OK);
                 return;
@@ -146,8 +146,8 @@ namespace StarCatalog
             if (messageBoxResult == MessageBoxResult.No)
                 return;
 
-            ConstellationCollectionManager.ClearCollection();
-            LoadCollectionToListBox(ConstellationCollectionManager.Constellations);
+            CollectionManager.ClearCollection();
+            LoadCollectionToListBox(CollectionManager.Constellations);
 
             MessageBox.Show("All constellations were removed!", "Success", MessageBoxButton.OK);
 
@@ -165,17 +165,17 @@ namespace StarCatalog
             var option = (sender as ComboBox)?.Text;
             if (option == "constellation")
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+                LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
                 this.SortTypeComboBox.IsEnabled = true;
             }
             else if (option == "star")
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetStarsGroupedByConstellation());
+                LoadCollectionToListBox(CollectionManager.GetStarsGroupedByConstellation());
                 this.SortTypeComboBox.IsEnabled = false;
             }
             else if (option == "planet")
             {
-                LoadCollectionToListBox(ConstellationCollectionManager.GetAllPlanets());
+                LoadCollectionToListBox(CollectionManager.GetAllPlanets());
                 this.SortTypeComboBox.IsEnabled = false;
             }
         }
@@ -185,7 +185,7 @@ namespace StarCatalog
             if (!(sender is Button senderButton))
                 return;
 
-            ConstellationCollectionManager.Current = (int) senderButton.Tag;
+            CollectionManager.Current = (int) senderButton.Tag;
 
             var result = MessageBox.Show("You sure you want to remove that element?\nYou cannot undo that later.",
                 "Warning", MessageBoxButton.YesNo);
@@ -193,8 +193,8 @@ namespace StarCatalog
             if (result == MessageBoxResult.No)
                 return;
 
-            ConstellationCollectionManager.RemoveCurrent();
-            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            CollectionManager.RemoveCurrent();
+            LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
             MessageBox.Show("Element was removed successfully!", "Success", MessageBoxButton.OK);
             InfoStateController.InfoChanged();
         }
@@ -204,7 +204,7 @@ namespace StarCatalog
             if (!(sender is Button senderButton))
                 return;
 
-            ConstellationCollectionManager.Current = (int) senderButton.Tag;
+            CollectionManager.Current = (int) senderButton.Tag;
             ShowFullInfoWindow();
         }
 
@@ -240,9 +240,9 @@ namespace StarCatalog
                 return;
 
             var fullPathToFile = openFileDialog.FileName;
-            ConstellationCollectionManager.LoadFromFile(fullPathToFile);
+            CollectionManager.LoadFromFile(fullPathToFile);
 
-            LoadCollectionToListBox(ConstellationCollectionManager.GetConstellationsSortedBy("Name"));
+            LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
 
             MessageBox.Show("Loaded!");
             InfoStateController.Reset();
@@ -264,7 +264,7 @@ namespace StarCatalog
                 return false;
 
             var fullPathToFile = saveFileDialog.FileName;
-            ConstellationCollectionManager.SaveToFile(fullPathToFile);
+            CollectionManager.SaveToFile(fullPathToFile);
 
             MessageBox.Show("Saved!");
             InfoStateController.Reset();
@@ -275,7 +275,7 @@ namespace StarCatalog
         {
             WindowsManager.StoreWindow(this);
             this.Hide();
-            var constellationList = ConstellationCollectionManager.Constellations.ToList();
+            var constellationList = CollectionManager.Constellations.ToList();
             var pageManager = new ConstellationPagesManager(constellationList);
             var pageViewWindow = new PageViewWindow(pageManager);
             pageViewWindow.Show();
