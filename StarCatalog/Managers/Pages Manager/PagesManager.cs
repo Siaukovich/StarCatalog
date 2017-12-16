@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace StarCatalog
 {
-    public class PagesManager<T> : IPageManager 
+    public class PagesManager<T> : IPagesManager 
                          where T : Page, IViewPage, new()
     {
         private T _currentPage;
@@ -48,7 +48,11 @@ namespace StarCatalog
 
         public Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler)
         {
-            this.ShiftToNext(); // NextPage is null after that.
+            this._previousPage = this._currentPage;
+            this._currentPage = this._nextPage;
+            this._nextPage = null;
+
+            this.CurrentPageNumber++; 
 
             if (this.CurrentPageNumber == this._collection.Count)
                 return Task.CompletedTask;
@@ -58,7 +62,11 @@ namespace StarCatalog
 
         public Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler)
         {
-            this.ShiftToPrevious(); // PreviousPage is null after that.
+            this._nextPage = this._currentPage;
+            this._currentPage = this._previousPage;
+            this._previousPage = null;
+
+            this.CurrentPageNumber--;
 
             if (this.CurrentPageNumber == 1)
                 return Task.CompletedTask;
@@ -68,7 +76,11 @@ namespace StarCatalog
 
         public Task MoveToFirstAsync(TaskScheduler uiTaskScheduler)
         {
-            this.MoveToFirst(); // PreviousPage and NextPage is null after that.
+            this._currentPage = _firstPage;
+            this._previousPage = null;
+            this._nextPage = null;
+
+            this.CurrentPageNumber = 1;
 
             if (this._collection.Count == 1)
                 return Task.CompletedTask;
@@ -78,48 +90,16 @@ namespace StarCatalog
 
         public Task MoveToLastAsync(TaskScheduler uiTaskScheduler)
         {
-            MoveToLast(); // PreviousPage and NextPage is null after that.
-
-            if (this._collection.Count == 1)
-                return Task.CompletedTask;
-
-            return Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
-        }
-
-        private void ShiftToNext()
-        {
-            this._previousPage = this._currentPage;
-            this._currentPage = this._nextPage;
-            this._nextPage = null;
-
-            this.CurrentPageNumber++;
-        }
-
-        private void ShiftToPrevious()
-        {
-            this._nextPage = this._currentPage;
-            this._currentPage = this._previousPage;
-            this._previousPage = null;
-
-            this.CurrentPageNumber--;
-        }
-
-        private void MoveToFirst()
-        {
-            this._currentPage = _firstPage;
-            this._previousPage = null;
-            this._nextPage = null;
-
-            this.CurrentPageNumber = 1;
-        }
-
-        private void MoveToLast()
-        {
             this._currentPage = _lastPage;
             this._previousPage = null;
             this._nextPage = null;
 
             this.CurrentPageNumber = this._collection.Count;
+
+            if (this._collection.Count == 1)
+                return Task.CompletedTask;
+
+            return Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
         }
 
         private Task<T> LoadNextPageAsync(TaskScheduler taskScheduler)

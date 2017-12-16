@@ -8,42 +8,66 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="StarViewPage">
 
-    <StackPanel Margin="10">
-        <TextBlock Text="List of planets in star"
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="5">
+            <TextBlock Text="Information about star"
                        HorizontalAlignment="Center"
                        FontSize="12"
                        Margin="7 2"
                        Foreground="LightSlateGray" />
 
-        <TextBlock Text="{Binding Name}"
-                   HorizontalAlignment="Center"
-                   FontWeight="Medium"
-                   FontSize="18"
-                   Margin="5"
-                   Foreground="LightSlateGray" />
+            <TextBlock Text="{Binding Name}"
+                       HorizontalAlignment="Center"
+                       FontWeight="Medium"
+                       FontSize="18"
+                       Margin="5"
+                       Foreground="LightSlateGray" />
 
-        <ListBox x:Name="PlanetListBox"
-                 MaxHeight="300" MinHeight="300"
-                 Margin="10"
-                 Width="Auto"
-                 ScrollViewer.CanContentScroll="False">
+            <TextBlock Text="{Binding FullName}"
+                       HorizontalAlignment="Center"
+                       FontWeight="Medium"
+                       FontSize="15"
+                       Margin="5"
+                       Foreground="LightSlateGray" />
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1"
+                    Margin="5">
+            <TextBlock Text="List of planets in star"
+                       HorizontalAlignment="Center"
+                       FontSize="12"
+                       Margin="7 2"
+                       Foreground="LightSlateGray" />
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Focusable" Value="False" />
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="Width" Value="Auto"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
+            <ListBox x:Name="PlanetListBox"
+                     MaxHeight="300" MinHeight="300"
+                     Margin="10"
+                     Width="Auto"
+                     ScrollViewer.CanContentScroll="False">
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="0 0 0 1"
-                            BorderBrush="Linen">
-                        <TextBlock Text="{Binding FullName}" />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </StackPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Focusable" Value="False" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="Width" Value="Auto" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0 0 0 1"
+                                BorderBrush="LightSlateGray">
+                            <TextBlock Text="{Binding FullName}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+    </Grid>
 </Page>

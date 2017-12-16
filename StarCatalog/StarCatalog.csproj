@@ -59,7 +59,6 @@
     <Compile Include="Helpers\IPluginable.cs" />
     <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\InfoStateController.cs" />
-    <Compile Include="Managers\Pages Manager\ConstellationPagesManager.cs" />
     <Compile Include="Managers\Pages Manager\PagesManager.cs" />
     <Compile Include="Managers\WindowsManager.cs" />
     <Compile Include="Pages\IViewPage.cs" />
@@ -77,8 +76,7 @@
     <Compile Include="Pages\ConstellationViewPage.xaml.cs">
       <DependentUpon>ConstellationViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Managers\Pages Manager\PageViewWindow.CurrentManager.cs" />
-    <Compile Include="Managers\Pages Manager\IPageManager.cs" />
+    <Compile Include="Managers\Pages Manager\IPagesManager.cs" />
     <Compile Include="Windows\PageViewWindow.xaml.cs">
       <DependentUpon>PageViewWindow.xaml</DependentUpon>
     </Compile>

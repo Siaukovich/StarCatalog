@@ -17,8 +17,8 @@
                 <!-- Planet's full name-->
             </DataTemplate>
             <HierarchicalDataTemplate x:Key="level1"
-                                            ItemsSource="{Binding Planets}"
-                                            ItemTemplate="{StaticResource level2}">
+                                      ItemsSource="{Binding Planets}"
+                                      ItemTemplate="{StaticResource level2}">
                 <TextBlock Text="{Binding FullName}" />
                 <!-- Star full name -->
             </HierarchicalDataTemplate>

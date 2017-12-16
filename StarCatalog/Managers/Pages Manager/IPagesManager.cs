@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace StarCatalog
 {
-    public interface IPageManager
+    public interface IPagesManager
     {
         Page CurrentPage  { get; }
         Page NextPage     { get; }

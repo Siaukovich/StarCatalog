@@ -11,10 +11,15 @@ namespace StarCatalog
     /// </summary>
     public partial class PageViewWindow : Window
     {
-        public PageViewWindow(IPageManager pageManager)
+        private static class CurrentPageManager
+        {
+            public static IPagesManager Instance { get; set; }
+        }
+
+        public PageViewWindow(IPagesManager pagesManager)
         {
             InitializeComponent();
-            CurrentPageManager.Instance = pageManager;
+            CurrentPageManager.Instance = pagesManager;
             SetUp();
         }
 
