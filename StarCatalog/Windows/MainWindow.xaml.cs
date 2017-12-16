@@ -276,7 +276,7 @@ namespace StarCatalog
             WindowsManager.StoreWindow(this);
             this.Hide();
             var constellationList = CollectionManager.Constellations.ToList();
-            var pageManager = new ConstellationPagesManager(constellationList);
+            var pageManager = new PagesManager<ConstellationViewPage>(constellationList);
             var pageViewWindow = new PageViewWindow(pageManager);
             pageViewWindow.Show();
         }

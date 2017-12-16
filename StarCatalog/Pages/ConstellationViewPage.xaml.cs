@@ -5,12 +5,16 @@ namespace StarCatalog
     /// <summary>
     /// Логика взаимодействия для ConstellationView.xaml
     /// </summary>
-    public partial class ConstellationViewPage : Page
+    public partial class ConstellationViewPage : Page, IViewPage
     {
-        public ConstellationViewPage(int pageIndex)
+        public ConstellationViewPage()
+        {
+            InitializeComponent();
+        }
+
+        public void SetDataContext(int pageIndex)
         {
             CollectionManager.Current = pageIndex - 1;
-            InitializeComponent();
             this.DataContext = CollectionManager.Constellations[pageIndex - 1];
         }
     }

@@ -1,17 +1,22 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace StarCatalog
 {
     /// <summary>
     /// Логика взаимодействия для StarViewPage.xaml
     /// </summary>
-    public partial class StarViewPage : Page
+    public partial class StarViewPage : Page, IViewPage
     {
-        public StarViewPage(int pageIndex)
+        public StarViewPage()
         {
             InitializeComponent();
-            var stars = CollectionManager.GetAllStars();
-            var star = stars[pageIndex - 1];
+        }
+
+        public void SetDataContext(int pageIndex)
+        {
+            List<Star> stars = CollectionManager.GetAllStars();
+            Star star = stars[pageIndex - 1];
             this.DataContext = star;
             this.PlanetListBox.ItemsSource = star.Planets;
         }

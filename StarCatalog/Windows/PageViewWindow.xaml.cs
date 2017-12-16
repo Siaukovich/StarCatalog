@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace StarCatalog.Windows
+namespace StarCatalog
 {
     /// <summary>
     /// Логика взаимодействия для PageViewWindow.xaml
     /// </summary>
     public partial class PageViewWindow : Window
     {
-        public PageViewWindow(AsyncPageManager pageManager)
+        public PageViewWindow(IPageManager pageManager)
         {
             InitializeComponent();
             CurrentPageManager.Instance = pageManager;
@@ -99,15 +98,15 @@ namespace StarCatalog.Windows
         {
             var text = this.TypeComboBox.Text;
 
-            if (text == "Stars" && !(CurrentPageManager.Instance is StarPagesManager))
+            if (text == "Stars" && !(CurrentPageManager.Instance is PagesManager<StarViewPage>))
             {
                 var starsList = CollectionManager.GetAllStarsWithParallel().ToList();
-                CurrentPageManager.Instance = new StarPagesManager(starsList);
+                CurrentPageManager.Instance = new PagesManager<StarViewPage>(starsList);
             }
-            else if (text == "Constellations" && !(CurrentPageManager.Instance is ConstellationPagesManager))
+            else if (text == "Constellations" && !(CurrentPageManager.Instance is PagesManager<ConstellationViewPage>))
             {
                 var constellationList = CollectionManager.Constellations.ToList();
-                CurrentPageManager.Instance = new ConstellationPagesManager(constellationList);
+                CurrentPageManager.Instance = new PagesManager<ConstellationViewPage>(constellationList);
             }
 
             this.ToFirstButton_OnClick(sender, new RoutedEventArgs());

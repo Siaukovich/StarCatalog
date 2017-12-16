@@ -1,10 +1,10 @@
-﻿namespace StarCatalog.Windows
+﻿namespace StarCatalog
 {
     public partial class PageViewWindow
     {
         private static class CurrentPageManager
         {
-            public static AsyncPageManager Instance { get; set; }
+            public static IPageManager Instance { get; set; }
         }
     }
 }
