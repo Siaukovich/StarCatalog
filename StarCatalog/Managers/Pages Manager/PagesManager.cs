@@ -46,21 +46,21 @@ namespace StarCatalog
             this._nextPage.SetDataContext(CurrentPageNumber + 1);
         }
 
-        public Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler)
+        public async Task ShiftToNextPageAsync(TaskScheduler uiTaskScheduler)
         {
             this._previousPage = this._currentPage;
             this._currentPage = this._nextPage;
             this._nextPage = null;
 
-            this.CurrentPageNumber++; 
+            this.CurrentPageNumber++;
 
             if (this.CurrentPageNumber == this._collection.Count)
-                return Task.CompletedTask;
+                return;
 
-            return Task.Run(async () => this._nextPage = await LoadNextPageAsync(uiTaskScheduler));
+            await Task.Run(async () => this._nextPage = await LoadNextPageAsync(uiTaskScheduler));
         }
 
-        public Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler)
+        public async Task ShiftToPreviousPageAsync(TaskScheduler uiTaskScheduler)
         {
             this._nextPage = this._currentPage;
             this._currentPage = this._previousPage;
@@ -69,12 +69,12 @@ namespace StarCatalog
             this.CurrentPageNumber--;
 
             if (this.CurrentPageNumber == 1)
-                return Task.CompletedTask;
+                return;
 
-            return Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
+            await Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
         }
 
-        public Task MoveToFirstAsync(TaskScheduler uiTaskScheduler)
+        public async Task MoveToFirstAsync(TaskScheduler uiTaskScheduler)
         {
             this._currentPage = _firstPage;
             this._previousPage = null;
@@ -83,12 +83,12 @@ namespace StarCatalog
             this.CurrentPageNumber = 1;
 
             if (this._collection.Count == 1)
-                return Task.CompletedTask;
+                return;
 
-            return Task.Run(async () => this._nextPage = await LoadNextPageAsync(uiTaskScheduler));
+            await Task.Run(async () => this._nextPage = await LoadNextPageAsync(uiTaskScheduler));
         }
 
-        public Task MoveToLastAsync(TaskScheduler uiTaskScheduler)
+        public async Task MoveToLastAsync(TaskScheduler uiTaskScheduler)
         {
             this._currentPage = _lastPage;
             this._previousPage = null;
@@ -97,15 +97,14 @@ namespace StarCatalog
             this.CurrentPageNumber = this._collection.Count;
 
             if (this._collection.Count == 1)
-                return Task.CompletedTask;
+                return;
 
-            return Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
+            await Task.Run(async () => this._previousPage = await LoadPreviousPageAsync(uiTaskScheduler));
         }
 
         private Task<T> LoadNextPageAsync(TaskScheduler taskScheduler)
         {
-            return Task.Factory.StartNew(
-                () => 
+            return Task.Factory.StartNew(() => 
                 {
                     T nextPage = new T();
                     nextPage.SetDataContext(CurrentPageNumber + 1);
@@ -116,8 +115,7 @@ namespace StarCatalog
 
         private Task<T> LoadPreviousPageAsync(TaskScheduler taskScheduler)
         {
-            return Task.Factory.StartNew(
-                () =>
+            return Task.Factory.StartNew(() =>
                 {
                     T prevPage = new T();
                     prevPage.SetDataContext(CurrentPageNumber - 1);

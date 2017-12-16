@@ -14,18 +14,20 @@
         <Menu DockPanel.Dock="Top"
               Background="{Binding ElementName=Window, Path=Background}" >
             <MenuItem Header="File">
-                <MenuItem Header="Create new constellation"
-                          Click="AddConstellationButton_OnClick"/>
+                <MenuItem x:Name="NewConstellationMenuItem"
+                          Header="Create new constellation"
+                          Click="AddConstellationButton_OnClick" />
                 <MenuItem Header="Remove all constellations"
-                          Click="RemoveAllButton_OnClick"/>
+                          Click="RemoveAllButton_OnClick" />
                 <Separator />
-                <MenuItem Header="Save to file"
-                          Click="MenuItem_Save_OnClick" />
+                <MenuItem x:Name="SaveFileMenuItem"
+                          Header="Save to file"
+                          Click="SaveFile_OnClick" />
                 <MenuItem Header="Load from file"
-                          Click="MenuItem_Load_OnClick" />
+                          Click="LoadFile_OnClick" />
                 <Separator />
                 <MenuItem Header="Exit" 
-                          Click="ExitButton_OnClick"/>
+                          Click="Exit_OnClick"/>
             </MenuItem>
             <MenuItem Header="Plugins"
                       x:Name="PluginsMenuItem" 
@@ -188,7 +190,7 @@
                 <Button x:Name="ExitButton"
                         Content="Close Star Catalog"
                         Style="{StaticResource ButtonStyleUniversal}"
-                        Click="ExitButton_OnClick" />
+                        Click="Exit_OnClick" />
 
             </StackPanel>
         </Grid>

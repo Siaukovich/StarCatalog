@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,16 +16,23 @@ namespace StarCatalog
         {
             await Task.Delay(2000);
 
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var location = Path.Combine(currentDirectory.Substring(0, currentDirectory.Length - "Debug\\bin\\".Length), "Plugins");
-
-            if (!Directory.Exists(location))
+            const string pluginFolderConfigKey = "PluginsFolder";
+            if (!ConfigurationManager.AppSettings.AllKeys.Contains(pluginFolderConfigKey))
             {
-                Plugins = new Dictionary<string, IPluginable>();
-                throw new DirectoryNotFoundException("Directory for plugins not found!");
+                throw new ConfigurationErrorsException("Configuration doesn't contain value for plugin folder! " +
+                                                       "Plugins won't load.");
             }
 
-            var dllNames = Directory.GetFiles(location, "*.dll", SearchOption.AllDirectories);
+            string pluginsFolderName = ConfigurationManager.AppSettings[pluginFolderConfigKey];
+            string pluginsDirectory = Path.Combine(Environment.CurrentDirectory, pluginsFolderName);
+            if (!Directory.Exists(pluginsDirectory))
+            {
+                Plugins = new Dictionary<string, IPluginable>();
+                Directory.CreateDirectory(pluginsDirectory);
+                throw new DirectoryNotFoundException("Directory for plugins was not found! Directory created.");
+            }
+
+            var dllNames = Directory.GetFiles(pluginsDirectory, "*.dll", SearchOption.AllDirectories);
             var assemblies = new List<Assembly>(dllNames.Length);
             foreach (var dllName in dllNames)
             {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Win32;
 using StarCatalog.Helpers;
 using StarCatalog.Windows;
@@ -22,6 +24,7 @@ namespace StarCatalog
             LoadCollectionToListBox(CollectionManager.GetConstellationsSortedBy("Name"));
             this.Show();
             LoadPlugins();
+            SetHotkeys();
         }
 
         private async void LoadPlugins()
@@ -41,32 +44,69 @@ namespace StarCatalog
                     return;
                 }
 
-                items = PluginsCollectionManager.Plugins.Keys.Select(p => (object)p).ToList();
+                items = PluginsCollectionManager.Plugins.Keys.Cast<object>().ToList();
+                AddSeparatorAndReloadToPluginMenu(items);
             }
             catch (DirectoryNotFoundException e)
             {
                 MessageBox.Show(e.Message);
                 this.PluginsMenuItem.Header = "No plugins";
+                AddSeparatorAndReloadToPluginMenu(items);
             }
-            finally
+            catch (ConfigurationErrorsException e)
             {
-                items.Add(new Separator());
-                items.Add(GetReloadPluginsMenuItem());
+                MessageBox.Show(e.Message);
+                this.PluginsMenuItem.Header = "Config error";
+            }
+        }
 
-                this.PluginsMenuItem.Header = "Plugins";
-                this.PluginsMenuItem.ItemsSource = items;
-                this.PluginsMenuItem.IsEnabled = true;
+        private void AddSeparatorAndReloadToPluginMenu(List<object> items)
+        {
+            items.Add(new Separator());
+            items.Add(GetReloadPluginsMenuItem());
+
+            this.PluginsMenuItem.Header = "Plugins";
+            this.PluginsMenuItem.ItemsSource = items;
+            this.PluginsMenuItem.IsEnabled = true;
+        }
+
+        private void SetHotkeys()
+        {
+            var hotkeysSection = (HotkeySection)ConfigurationManager.GetSection("HotkeySection");
+
+            var saveFileCommand = new CommandBinding { Command = HotkeyCommands.SaveFile };
+            saveFileCommand.Executed += SaveFile_OnClick;
+
+            var openFileCommand = new CommandBinding { Command = HotkeyCommands.OpenFile };
+            openFileCommand.Executed += LoadFile_OnClick;
+
+            var exitCommand = new CommandBinding { Command = HotkeyCommands.CloseWindow };
+            exitCommand.Executed += Exit_OnClick;
+
+            var reloadPluginsCommand = new CommandBinding { Command = HotkeyCommands.ReloadPlugins };
+            reloadPluginsCommand.Executed += ReloadPlugins_OnClick;
+
+            CommandBindings.Add(saveFileCommand);
+            CommandBindings.Add(openFileCommand);
+            CommandBindings.Add(exitCommand);
+            CommandBindings.Add(reloadPluginsCommand);
+
+            foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
+            {
+                RoutedCommand command = HotkeyCommands.GetCommand(hotkey.CommandName);
+                KeyGesture gesture = HotkeyCommands.GetKeyGesture(hotkey.Gesture);
+                InputBindings.Add(new KeyBinding(command, gesture));
             }
         }
 
         private MenuItem GetReloadPluginsMenuItem()
         {
             var newMenuItem = new MenuItem { Header = "Reload plugins" };
-            newMenuItem.Click += MenuItem_ReloadPlugins_OnClick;
+            newMenuItem.Click += ReloadPlugins_OnClick;
             return newMenuItem;
         }
 
-        private void MenuItem_ReloadPlugins_OnClick(object sender, RoutedEventArgs e)
+        private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)
         {
             LoadPlugins();
         }
@@ -80,7 +120,7 @@ namespace StarCatalog
                 return;
 
             var pluginName = menuItem.Header.ToString();
-            var plugin = PluginsCollectionManager.Plugins[pluginName];
+            IPluginable plugin = PluginsCollectionManager.Plugins[pluginName];
             plugin.Start();
             plugin.ShowFinalMessage();
         }
@@ -224,12 +264,12 @@ namespace StarCatalog
             addConstellationWindow.Show();
         }
 
-        private void MenuItem_Save_OnClick(object sender, RoutedEventArgs e)
+        private void SaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             SaveToFile();
         }
 
-        private void MenuItem_Load_OnClick(object sender, RoutedEventArgs e)
+        private void LoadFile_OnClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog()
             {
@@ -281,7 +321,7 @@ namespace StarCatalog
             pageViewWindow.Show();
         }
 
-        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
+        private void Exit_OnClick(object sender, RoutedEventArgs e)
         {
             if (!InfoStateController.InfoWasChanged)
             {
