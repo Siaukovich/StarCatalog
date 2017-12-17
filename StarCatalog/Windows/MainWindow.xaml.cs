@@ -78,7 +78,7 @@ namespace StarCatalog
             var openFileCommand = new CommandBinding { Command = HotkeyCommands.OpenFile };
             openFileCommand.Executed += LoadFile_OnClick;
 
-            var exitCommand = new CommandBinding { Command = HotkeyCommands.CloseWindow };
+            var exitCommand = new CommandBinding { Command = HotkeyCommands.Exit };
             exitCommand.Executed += Exit_OnClick;
 
             var reloadPluginsCommand = new CommandBinding { Command = HotkeyCommands.ReloadPlugins };
@@ -111,7 +111,7 @@ namespace StarCatalog
             var hotkeysSection = (HotkeySection) ConfigurationManager.GetSection("HotkeySection");
             foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
             {
-                
+                // TODO
             }
         }
 

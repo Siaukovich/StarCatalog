@@ -14,8 +14,7 @@
         <Menu DockPanel.Dock="Top"
               Background="{Binding ElementName=Window, Path=Background}" >
             <MenuItem Header="File">
-                <MenuItem x:Name="NewConstellationMenuItem"
-                          Header="Create new constellation"
+                <MenuItem Header="Create new constellation"
                           Click="AddConstellationButton_OnClick" />
                 <MenuItem Header="Remove all constellations"
                           Click="RemoveAllButton_OnClick" />
@@ -23,7 +22,8 @@
                 <MenuItem x:Name="SaveFileMenuItem"
                           Header="Save to file"
                           Click="SaveFile_OnClick" />
-                <MenuItem Header="Load from file"
+                <MenuItem x:Name="OpenFileMenuItem"
+                          Header="Load from file"
                           Click="LoadFile_OnClick" />
                 <Separator />
                 <MenuItem Header="Exit" 
