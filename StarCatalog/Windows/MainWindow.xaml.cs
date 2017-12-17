@@ -45,29 +45,27 @@ namespace StarCatalog
                 }
 
                 items = PluginsCollectionManager.Plugins.Keys.Cast<object>().ToList();
-                AddSeparatorAndReloadToPluginMenu(items);
             }
             catch (DirectoryNotFoundException e)
             {
                 MessageBox.Show(e.Message);
                 this.PluginsMenuItem.Header = "No plugins";
-                AddSeparatorAndReloadToPluginMenu(items);
             }
             catch (ConfigurationErrorsException e)
             {
-                MessageBox.Show(e.Message);
-                this.PluginsMenuItem.Header = "Config error";
+                var message = e.Message + " Plugins are not going to be loaded. " +
+                              "Check config file and try to reload plugins.";
+                MessageBox.Show(message);
             }
-        }
+            finally
+            {
+                items.Add(new Separator());
+                items.Add(GetReloadPluginsMenuItem());
 
-        private void AddSeparatorAndReloadToPluginMenu(List<object> items)
-        {
-            items.Add(new Separator());
-            items.Add(GetReloadPluginsMenuItem());
-
-            this.PluginsMenuItem.Header = "Plugins";
-            this.PluginsMenuItem.ItemsSource = items;
-            this.PluginsMenuItem.IsEnabled = true;
+                this.PluginsMenuItem.Header = "Plugins";
+                this.PluginsMenuItem.ItemsSource = items;
+                this.PluginsMenuItem.IsEnabled = true;
+            }
         }
 
         private void SetHotkeys()
@@ -86,6 +84,8 @@ namespace StarCatalog
             var reloadPluginsCommand = new CommandBinding { Command = HotkeyCommands.ReloadPlugins };
             reloadPluginsCommand.Executed += ReloadPlugins_OnClick;
 
+            SetGestures();
+
             CommandBindings.Add(saveFileCommand);
             CommandBindings.Add(openFileCommand);
             CommandBindings.Add(exitCommand);
@@ -93,9 +93,25 @@ namespace StarCatalog
 
             foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
             {
-                RoutedCommand command = HotkeyCommands.GetCommand(hotkey.CommandName);
-                KeyGesture gesture = HotkeyCommands.GetKeyGesture(hotkey.Gesture);
-                InputBindings.Add(new KeyBinding(command, gesture));
+                try
+                {
+                    RoutedCommand command = HotkeyCommands.GetCommand(hotkey.CommandName);
+                    KeyGesture gesture = HotkeyCommands.GetKeyGesture(hotkey.Gesture);
+                    InputBindings.Add(new KeyBinding(command, gesture));
+                }
+                catch (ConfigurationErrorsException)
+                {
+                    // If error occurs, use default hotkeys.
+                }
+            }
+        }
+
+        private void SetGestures()
+        {
+            var hotkeysSection = (HotkeySection) ConfigurationManager.GetSection("HotkeySection");
+            foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
+            {
+                
             }
         }
 
@@ -108,6 +124,9 @@ namespace StarCatalog
 
         private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!this.PluginsMenuItem.IsEnabled)
+                return;
+
             LoadPlugins();
         }
 

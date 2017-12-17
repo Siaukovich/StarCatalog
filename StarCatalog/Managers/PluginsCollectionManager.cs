@@ -19,8 +19,7 @@ namespace StarCatalog
             const string pluginFolderConfigKey = "PluginsFolder";
             if (!ConfigurationManager.AppSettings.AllKeys.Contains(pluginFolderConfigKey))
             {
-                throw new ConfigurationErrorsException("Configuration doesn't contain value for plugin folder! " +
-                                                       "Plugins won't load.");
+                throw new ConfigurationErrorsException("Configuration doesn't contain value for plugin folder!");
             }
 
             string pluginsFolderName = ConfigurationManager.AppSettings[pluginFolderConfigKey];

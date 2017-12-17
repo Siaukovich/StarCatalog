@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Configuration;
 using System.Windows.Input;
 
 namespace StarCatalog
@@ -8,7 +8,6 @@ namespace StarCatalog
         public static RoutedCommand SaveFile { get; set; } = new RoutedCommand(nameof(SaveFile), typeof(MainWindow));
         public static RoutedCommand OpenFile { get; set; } = new RoutedCommand(nameof(OpenFile), typeof(MainWindow));
         public static RoutedCommand ReloadPlugins { get; set; } = new RoutedCommand(nameof(ReloadPlugins), typeof(MainWindow));
-
         public static RoutedCommand CloseWindow { get; set; } = new RoutedCommand(nameof(CloseWindow), typeof(MainWindow));
 
         public static RoutedCommand GetCommand(string commandName)
@@ -20,7 +19,7 @@ namespace StarCatalog
                 case nameof(ReloadPlugins): return ReloadPlugins;
                 case nameof(CloseWindow): return CloseWindow;
 
-                default: throw new ArgumentException();
+                default: throw new ConfigurationErrorsException();
             }
         }
 
@@ -33,7 +32,7 @@ namespace StarCatalog
                 case "CTRL+R": return new KeyGesture(Key.R, ModifierKeys.Control);
                 case "ESC": return new KeyGesture(Key.Escape);
 
-                default: throw new ArgumentException();
+                default: throw new ConfigurationErrorsException();
             }
         }
     }
