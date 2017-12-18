@@ -10,6 +10,41 @@
         Height="500" Width="700" 
         MinWidth="650"
         MinHeight="330" >
+    
+    <Window.InputBindings>
+        <KeyBinding x:Name="OpenFileCommand" 
+                    Command="Open" 
+                    Gesture="CTRL+O"/>
+        
+        <KeyBinding x:Name="SaveFileCommand" 
+                    Command="Save" 
+                    Gesture="CTRL+S"/>
+        
+        <KeyBinding x:Name="ExitCommand" 
+                    Command="Close" 
+                    Gesture="CTRL+Q"/>
+        
+        <KeyBinding x:Name="ReloadPluginsCommand" 
+                    Command="Copy" 
+                    Gesture="CTRL+R"/>
+        
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="local:HotkeyCommands.OpenFile" 
+                        Executed="LoadFile_OnClick"/>
+
+        <CommandBinding Command="local:HotkeyCommands.SaveFile"
+                        Executed="SaveFile_OnClick"/>
+
+        <CommandBinding Command="local:HotkeyCommands.Exit" 
+                        Executed="Exit_OnClick"/>
+
+        <CommandBinding Command="local:HotkeyCommands.ReloadPlugins" 
+                        Executed="ReloadPlugins_OnClick"/>
+
+    </Window.CommandBindings>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               Background="{Binding ElementName=Window, Path=Background}" >
@@ -22,16 +57,20 @@
                 <MenuItem x:Name="SaveFileMenuItem"
                           Header="Save to file"
                           Click="SaveFile_OnClick" />
+                
                 <MenuItem x:Name="OpenFileMenuItem"
                           Header="Load from file"
                           Click="LoadFile_OnClick" />
                 <Separator />
-                <MenuItem Header="Exit" 
+                <MenuItem x:Name="ExitMenuItem"
+                          Header="Exit" 
                           Click="Exit_OnClick"/>
             </MenuItem>
             <MenuItem Header="Plugins"
                       x:Name="PluginsMenuItem" 
-                      Click="PluginsMenuItem_OnClick"/>
+                      Click="PluginsMenuItem_OnClick">
+                <MenuItem x:Name="ReloadPluginsMenuItem" />
+            </MenuItem>
         </Menu>
         
         <Separator DockPanel.Dock="Top"

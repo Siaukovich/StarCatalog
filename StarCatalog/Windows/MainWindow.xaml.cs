@@ -60,58 +60,15 @@ namespace StarCatalog
             finally
             {
                 items.Add(new Separator());
-                items.Add(GetReloadPluginsMenuItem());
+                MenuItem reloadPluginsMenuItem = GetReloadPluginsMenuItem();
+                items.Add(reloadPluginsMenuItem);
 
                 this.PluginsMenuItem.Header = "Plugins";
+                this.PluginsMenuItem.Items.Clear();
                 this.PluginsMenuItem.ItemsSource = items;
                 this.PluginsMenuItem.IsEnabled = true;
-            }
-        }
 
-        private void SetHotkeys()
-        {
-            var hotkeysSection = (HotkeySection)ConfigurationManager.GetSection("HotkeySection");
-
-            var saveFileCommand = new CommandBinding { Command = HotkeyCommands.SaveFile };
-            saveFileCommand.Executed += SaveFile_OnClick;
-
-            var openFileCommand = new CommandBinding { Command = HotkeyCommands.OpenFile };
-            openFileCommand.Executed += LoadFile_OnClick;
-
-            var exitCommand = new CommandBinding { Command = HotkeyCommands.Exit };
-            exitCommand.Executed += Exit_OnClick;
-
-            var reloadPluginsCommand = new CommandBinding { Command = HotkeyCommands.ReloadPlugins };
-            reloadPluginsCommand.Executed += ReloadPlugins_OnClick;
-
-            SetGestures();
-
-            CommandBindings.Add(saveFileCommand);
-            CommandBindings.Add(openFileCommand);
-            CommandBindings.Add(exitCommand);
-            CommandBindings.Add(reloadPluginsCommand);
-
-            foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
-            {
-                try
-                {
-                    RoutedCommand command = HotkeyCommands.GetCommand(hotkey.CommandName);
-                    KeyGesture gesture = HotkeyCommands.GetKeyGesture(hotkey.Gesture);
-                    InputBindings.Add(new KeyBinding(command, gesture));
-                }
-                catch (ConfigurationErrorsException)
-                {
-                    // If error occurs, use default hotkeys.
-                }
-            }
-        }
-
-        private void SetGestures()
-        {
-            var hotkeysSection = (HotkeySection) ConfigurationManager.GetSection("HotkeySection");
-            foreach (HotkeyElement hotkey in hotkeysSection.Hotkeys)
-            {
-                // TODO
+                this.ReloadPluginsCommand.Gesture = GetKeyGesture("ReloadPlugins", reloadPluginsMenuItem, HotkeyCommands.ReloadPlugins);
             }
         }
 
@@ -120,6 +77,23 @@ namespace StarCatalog
             var newMenuItem = new MenuItem { Header = "Reload plugins" };
             newMenuItem.Click += ReloadPlugins_OnClick;
             return newMenuItem;
+        }
+
+        private void SetHotkeys()
+        {
+            this.SaveFileCommand.Gesture = GetKeyGesture("SaveFile", this.SaveFileMenuItem, HotkeyCommands.SaveFile);
+            this.OpenFileCommand.Gesture = GetKeyGesture("OpenFile", this.OpenFileMenuItem, HotkeyCommands.OpenFile);
+            this.ExitCommand.Gesture = GetKeyGesture("Exit", this.ExitMenuItem, HotkeyCommands.Exit);
+        }
+
+        private KeyGesture GetKeyGesture(string settingName, MenuItem menuItem, RoutedCommand routedCommand)
+        {
+            var keyGestureConverter = new KeyGestureConverter();
+            var keyGesture = (KeyGesture)keyGestureConverter.ConvertFromString(ConfigurationManager.AppSettings[settingName]);
+            menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
+            InputBindings.Add(new KeyBinding(routedCommand, keyGesture));
+
+            return keyGesture;
         }
 
         private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)

@@ -61,9 +61,6 @@
     <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\InfoStateController.cs" />
     <Compile Include="Hotkeys\HotkeyCommands.cs" />
-    <Compile Include="Hotkeys\HotkeyElement.cs" />
-    <Compile Include="Hotkeys\HotkeysCollection.cs" />
-    <Compile Include="Hotkeys\HotkeySection.cs" />
     <Compile Include="Managers\Pages Manager\PagesManager.cs" />
     <Compile Include="Managers\WindowsManager.cs" />
     <Compile Include="Pages\IViewPage.cs" />
