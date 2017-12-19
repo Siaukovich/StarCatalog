@@ -60,7 +60,7 @@
     <Compile Include="Helpers\IPluginable.cs" />
     <Compile Include="Helpers\Serializer.cs" />
     <Compile Include="Helpers\InfoStateController.cs" />
-    <Compile Include="Hotkeys\HotkeyCommands.cs" />
+    <Compile Include="Managers\HotkeyCommandsManager.cs" />
     <Compile Include="Managers\Pages Manager\PagesManager.cs" />
     <Compile Include="Managers\WindowsManager.cs" />
     <Compile Include="Pages\IViewPage.cs" />

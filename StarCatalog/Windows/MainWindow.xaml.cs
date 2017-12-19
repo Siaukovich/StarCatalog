@@ -72,7 +72,7 @@ namespace StarCatalog
                 this.PluginsMenuItem.ItemsSource = items;
                 this.PluginsMenuItem.IsEnabled = true;
 
-                SetKeyGesture(this.ReloadPluginsCommand, "ReloadPlugins", reloadPluginsMenuItem, HotkeyCommands.ReloadPlugins);
+                SetKeyGesture(this.ReloadPluginsCommand, "ReloadPlugins", reloadPluginsMenuItem, HotkeyCommandsManager.ReloadPlugins);
             }
         }
 
@@ -85,40 +85,71 @@ namespace StarCatalog
 
         private void SetHotkeys()
         {
-            SetKeyGesture(this.SaveFileCommand, "SaveFile", this.SaveFileMenuItem, HotkeyCommands.SaveFile);
-            SetKeyGesture(this.OpenFileCommand, "OpenFile", this.OpenFileMenuItem, HotkeyCommands.OpenFile);
-            SetKeyGesture(this.ExitCommand, "Exit", this.ExitMenuItem, HotkeyCommands.Exit);
-            SetKeyGesture(this.PageViewCommand, "PageView", this.NewConstellationMenuItem, HotkeyCommands.PageView);
+            SetKeyGesture(this.SaveFileCommand, "SaveFile", this.SaveFileMenuItem, HotkeyCommandsManager.SaveFile);
+            SetKeyGesture(this.OpenFileCommand, "OpenFile", this.OpenFileMenuItem, HotkeyCommandsManager.OpenFile);
+            SetKeyGesture(this.ExitCommand, "Exit", this.ExitMenuItem, HotkeyCommandsManager.Exit);
+            SetKeyGesture(this.PageViewCommand, "PageView", this.NewConstellationMenuItem, HotkeyCommandsManager.PageView);
         }
 
         private void SetKeyGesture(KeyBinding keyBinding, string settingName, MenuItem menuItem, ICommand routedCommand)
         {
-            KeyGesture keyGesture = null;
-            bool configContainsSetting = ConfigurationManager.AppSettings.AllKeys.Contains(settingName);
+            KeyGesture keyGesture;
             bool elementWithSameGesturesAlreadyExists = false;
+            bool validShortcut;
 
-            if (configContainsSetting)
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(settingName))
+            {
+                validShortcut = TryConvertGestureFromString(settingName, out keyGesture);
+
+                if (keyGesture != null)
+                {
+                    elementWithSameGesturesAlreadyExists = HotkeyCommandsManager.KeyGestures.Any
+                        (kg => kg.Modifiers == keyGesture.Modifiers && kg.Key == keyGesture.Key);
+                    
+                }
+            }
+            else
+            {
+                return;
+            }
+
+            if (!validShortcut)  // If not valid shortcut in config file, use default shortcut defined in xaml.
+            {
+                keyGesture = (KeyGesture)keyBinding.Gesture;
+                menuItem.InputGestureText = HotkeyCommandsManager.GetKeyGestureAsString(keyGesture);
+            }
+
+            if (!elementWithSameGesturesAlreadyExists)
+            {
+                menuItem.InputGestureText = HotkeyCommandsManager.GetKeyGestureAsString(keyGesture);
+                keyBinding.Gesture = keyGesture;
+            }
+            else // If shortcut not found in config file, use default shortcut defined in xaml.
+            {
+                keyGesture = (KeyGesture)keyBinding.Gesture;
+                menuItem.InputGestureText = HotkeyCommandsManager.GetKeyGestureAsString(keyGesture);
+            }
+            
+            InputBindings.Add(new KeyBinding(routedCommand, keyGesture));
+            HotkeyCommandsManager.KeyGestures.Add(keyGesture);
+        }
+
+        private static bool TryConvertGestureFromString(string settingName, out KeyGesture keyGesture)
+        {
+            try
             {
                 var keyGestureConverter = new KeyGestureConverter();
                 keyGesture = (KeyGesture)keyGestureConverter.ConvertFromString(ConfigurationManager.AppSettings[settingName]);
 
-                elementWithSameGesturesAlreadyExists = HotkeyCommands.KeyGestures.Any
-                    (kg => kg.Modifiers == keyGesture.Modifiers && kg.Key == keyGesture.Key);
+                return true;
             }
-
-            if (configContainsSetting && !elementWithSameGesturesAlreadyExists)
+            catch (Exception e) when (e is ArgumentException || e is NotSupportedException)
             {
-                menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
-                keyBinding.Gesture = keyGesture;
+                // ArgumentException when not valid keys in shortcut (like "Ctrrr")
+                // NotSupportedException when 
+                keyGesture = null;
+                return false;
             }
-            else// If shortcut not found in config file, use default shortcut defined in xaml.
-            {
-                keyGesture = (KeyGesture)keyBinding.Gesture;
-                menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
-            }
-            
-            InputBindings.Add(new KeyBinding(routedCommand, keyGesture));
-            HotkeyCommands.KeyGestures.Add(keyGesture);
         }
 
         private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)

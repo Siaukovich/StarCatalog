@@ -30,19 +30,19 @@
     </Window.InputBindings>
 
     <Window.CommandBindings>
-        <CommandBinding Command="local:HotkeyCommands.PageView"
+        <CommandBinding Command="local:HotkeyCommandsManager.PageView"
                         Executed="PageView_OnClick" />
 
-        <CommandBinding Command="local:HotkeyCommands.OpenFile" 
+        <CommandBinding Command="local:HotkeyCommandsManager.OpenFile" 
                         Executed="LoadFile_OnClick"/>
 
-        <CommandBinding Command="local:HotkeyCommands.SaveFile"
+        <CommandBinding Command="local:HotkeyCommandsManager.SaveFile"
                         Executed="SaveFile_OnClick"/>
 
-        <CommandBinding Command="local:HotkeyCommands.Exit" 
+        <CommandBinding Command="local:HotkeyCommandsManager.Exit" 
                         Executed="Exit_OnClick"/>
 
-        <CommandBinding Command="local:HotkeyCommands.ReloadPlugins" 
+        <CommandBinding Command="local:HotkeyCommandsManager.ReloadPlugins" 
                         Executed="ReloadPlugins_OnClick"/>
 
     </Window.CommandBindings>

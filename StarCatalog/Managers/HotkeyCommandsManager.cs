@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace StarCatalog
 {
-    public static class HotkeyCommands
+    public static class HotkeyCommandsManager
     {
         public static RoutedCommand PageView { get; set; } = new RoutedCommand(nameof(PageView), typeof(MainWindow));
         public static RoutedCommand SaveFile { get; set; } = new RoutedCommand(nameof(SaveFile), typeof(MainWindow));
@@ -29,6 +29,9 @@ namespace StarCatalog
                 case ModifierKeys.Alt:
                     modifiersString = "Alt";
                     break;
+
+                    // No modifiers.
+                default: return gesture.Key.ToString();
             }
 
             return modifiersString + "+" + gesture.Key;
