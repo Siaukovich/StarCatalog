@@ -144,7 +144,13 @@ namespace StarCatalog
                 bool modifierIsWinOrShift = keyGesture.Modifiers == ModifierKeys.Windows ||
                                             keyGesture.Modifiers == ModifierKeys.Shift;
 
-                return !modifierIsWinOrShift;
+                if (modifierIsWinOrShift)
+                {
+                    keyGesture = null;
+                    return false;
+                }
+
+                return true;
             }
             catch (Exception e) when (e is ArgumentException || e is NotSupportedException)
             {
