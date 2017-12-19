@@ -145,8 +145,8 @@ namespace StarCatalog
             }
             catch (Exception e) when (e is ArgumentException || e is NotSupportedException)
             {
-                // ArgumentException when not valid keys in shortcut (like "Ctrrr")
-                // NotSupportedException when 
+                // ArgumentException when not valid keys in shortcut (like "Ctrrr").
+                // NotSupportedException when shortcut is ambigious (like "Shift+A").
                 keyGesture = null;
                 return false;
             }
