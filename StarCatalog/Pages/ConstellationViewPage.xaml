@@ -10,15 +10,13 @@
     
     <Grid>
         <Grid.Resources>
-            <local:StarsCurrent x:Key="Stars" />
-
-            <DataTemplate x:Key="level2">
+            <DataTemplate x:Key="Level2">
                 <TextBlock Text="{Binding FullName}" />
                 <!-- Planet's full name-->
             </DataTemplate>
-            <HierarchicalDataTemplate x:Key="level1"
+            <HierarchicalDataTemplate x:Key="Level1"
                                       ItemsSource="{Binding Planets}"
-                                      ItemTemplate="{StaticResource level2}">
+                                      ItemTemplate="{StaticResource Level2}">
                 <TextBlock Text="{Binding FullName}" />
                 <!-- Star full name -->
             </HierarchicalDataTemplate>
@@ -64,8 +62,7 @@
                         VerticalContentAlignment="Stretch"
                         Margin="25 15"
                         VerticalAlignment="Top"
-                        ItemTemplate="{StaticResource level1}"
-                        ItemsSource="{StaticResource Stars}" />
+                        ItemTemplate="{StaticResource Level1}"/>
         </StackPanel>
     </Grid>
 </Page>

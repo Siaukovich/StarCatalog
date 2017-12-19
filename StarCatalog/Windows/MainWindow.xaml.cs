@@ -53,8 +53,8 @@ namespace StarCatalog
             }
             catch (ConfigurationErrorsException e)
             {
-                var message = e.Message + " Plugins are not going to be loaded. " +
-                              "Check config file and try to reload plugins.";
+                string message = e.Message + " Plugins are not going to be loaded. " +
+                              "Check config file and reload program.";
                 MessageBox.Show(message);
             }
             finally

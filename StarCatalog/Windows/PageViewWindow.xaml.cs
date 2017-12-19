@@ -56,7 +56,7 @@ namespace StarCatalog
                 this.ToFirstButton.IsEnabled = false;
 
             TaskScheduler uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-            await Task.Run(() => CurrentPageManager.Instance.ShiftToPreviousPageAsync(uiTaskScheduler));
+            await CurrentPageManager.Instance.ShiftToPreviousPageAsync(uiTaskScheduler);
 
             UpdateButtonState();
         }

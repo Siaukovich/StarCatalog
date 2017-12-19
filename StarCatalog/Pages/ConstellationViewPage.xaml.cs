@@ -15,7 +15,9 @@ namespace StarCatalog
         public void SetDataContext(int pageIndex)
         {
             CollectionManager.Current = pageIndex - 1;
-            this.DataContext = CollectionManager.Constellations[pageIndex - 1];
+            Constellation currectConstellation = CollectionManager.GetCurrectConstellation();
+            this.DataContext = currectConstellation;
+            this.TreeView.ItemsSource = currectConstellation.Stars;
         }
     }
 }
