@@ -12,25 +12,27 @@
         MinHeight="330" >
     
     <Window.InputBindings>
+        <KeyBinding x:Name="PageViewCommand"
+                    Gesture="Ctrl+P" />
+        
         <KeyBinding x:Name="OpenFileCommand" 
-                    Command="Open" 
-                    Gesture="CTRL+O"/>
+                    Gesture="Ctrl+O"/>
         
         <KeyBinding x:Name="SaveFileCommand" 
-                    Command="Save" 
-                    Gesture="CTRL+S"/>
+                    Gesture="Ctrl+S"/>
         
         <KeyBinding x:Name="ExitCommand" 
-                    Command="Close" 
-                    Gesture="CTRL+Q"/>
+                    Gesture="Ctrl+Q"/>
         
         <KeyBinding x:Name="ReloadPluginsCommand" 
-                    Command="Copy" 
-                    Gesture="CTRL+R"/>
+                    Gesture="Ctrl+R"/>
         
     </Window.InputBindings>
 
     <Window.CommandBindings>
+        <CommandBinding Command="local:HotkeyCommands.PageView"
+                        Executed="PageView_OnClick" />
+
         <CommandBinding Command="local:HotkeyCommands.OpenFile" 
                         Executed="LoadFile_OnClick"/>
 
@@ -49,11 +51,12 @@
         <Menu DockPanel.Dock="Top"
               Background="{Binding ElementName=Window, Path=Background}" >
             <MenuItem Header="File">
-                <MenuItem Header="Create new constellation"
-                          Click="AddConstellationButton_OnClick" />
-                <MenuItem Header="Remove all constellations"
-                          Click="RemoveAllButton_OnClick" />
+                <MenuItem x:Name="NewConstellationMenuItem"
+                          Header="To page view"
+                          Click="PageView_OnClick" />
+                
                 <Separator />
+                
                 <MenuItem x:Name="SaveFileMenuItem"
                           Header="Save to file"
                           Click="SaveFile_OnClick" />
@@ -61,16 +64,17 @@
                 <MenuItem x:Name="OpenFileMenuItem"
                           Header="Load from file"
                           Click="LoadFile_OnClick" />
+                
                 <Separator />
+                
                 <MenuItem x:Name="ExitMenuItem"
                           Header="Exit" 
                           Click="Exit_OnClick"/>
             </MenuItem>
+            
             <MenuItem Header="Plugins"
                       x:Name="PluginsMenuItem" 
-                      Click="PluginsMenuItem_OnClick">
-                <MenuItem x:Name="ReloadPluginsMenuItem" />
-            </MenuItem>
+                      Click="PluginsMenuItem_OnClick" />
         </Menu>
         
         <Separator DockPanel.Dock="Top"
@@ -220,16 +224,6 @@
                         Content="Remove all constellations"
                         Style="{StaticResource ButtonStyleUniversal}"
                         Click="RemoveAllButton_OnClick" />
-
-                <Button x:Name="PageViewButton"
-                        Content="Page View"
-                        Style="{StaticResource ButtonStyleUniversal}"
-                        Click="PageViewButton_OnClick" />
-
-                <Button x:Name="ExitButton"
-                        Content="Close Star Catalog"
-                        Style="{StaticResource ButtonStyleUniversal}"
-                        Click="Exit_OnClick" />
 
             </StackPanel>
         </Grid>

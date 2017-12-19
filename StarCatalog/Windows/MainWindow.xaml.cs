@@ -60,15 +60,19 @@ namespace StarCatalog
             finally
             {
                 items.Add(new Separator());
+
                 MenuItem reloadPluginsMenuItem = GetReloadPluginsMenuItem();
                 items.Add(reloadPluginsMenuItem);
 
                 this.PluginsMenuItem.Header = "Plugins";
+
+                this.PluginsMenuItem.ItemsSource = null;
                 this.PluginsMenuItem.Items.Clear();
+
                 this.PluginsMenuItem.ItemsSource = items;
                 this.PluginsMenuItem.IsEnabled = true;
 
-                this.ReloadPluginsCommand.Gesture = GetKeyGesture("ReloadPlugins", reloadPluginsMenuItem, HotkeyCommands.ReloadPlugins);
+                SetKeyGesture(this.ReloadPluginsCommand, "ReloadPlugins", reloadPluginsMenuItem, HotkeyCommands.ReloadPlugins);
             }
         }
 
@@ -81,19 +85,40 @@ namespace StarCatalog
 
         private void SetHotkeys()
         {
-            this.SaveFileCommand.Gesture = GetKeyGesture("SaveFile", this.SaveFileMenuItem, HotkeyCommands.SaveFile);
-            this.OpenFileCommand.Gesture = GetKeyGesture("OpenFile", this.OpenFileMenuItem, HotkeyCommands.OpenFile);
-            this.ExitCommand.Gesture = GetKeyGesture("Exit", this.ExitMenuItem, HotkeyCommands.Exit);
+            SetKeyGesture(this.SaveFileCommand, "SaveFile", this.SaveFileMenuItem, HotkeyCommands.SaveFile);
+            SetKeyGesture(this.OpenFileCommand, "OpenFile", this.OpenFileMenuItem, HotkeyCommands.OpenFile);
+            SetKeyGesture(this.ExitCommand, "Exit", this.ExitMenuItem, HotkeyCommands.Exit);
+            SetKeyGesture(this.PageViewCommand, "PageView", this.NewConstellationMenuItem, HotkeyCommands.PageView);
         }
 
-        private KeyGesture GetKeyGesture(string settingName, MenuItem menuItem, RoutedCommand routedCommand)
+        private void SetKeyGesture(KeyBinding keyBinding, string settingName, MenuItem menuItem, ICommand routedCommand)
         {
-            var keyGestureConverter = new KeyGestureConverter();
-            var keyGesture = (KeyGesture)keyGestureConverter.ConvertFromString(ConfigurationManager.AppSettings[settingName]);
-            menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
-            InputBindings.Add(new KeyBinding(routedCommand, keyGesture));
+            KeyGesture keyGesture = null;
+            bool configContainsSetting = ConfigurationManager.AppSettings.AllKeys.Contains(settingName);
+            bool elementWithSameGesturesAlreadyExists = false;
 
-            return keyGesture;
+            if (configContainsSetting)
+            {
+                var keyGestureConverter = new KeyGestureConverter();
+                keyGesture = (KeyGesture)keyGestureConverter.ConvertFromString(ConfigurationManager.AppSettings[settingName]);
+
+                elementWithSameGesturesAlreadyExists = HotkeyCommands.KeyGestures.Any
+                    (kg => kg.Modifiers == keyGesture.Modifiers && kg.Key == keyGesture.Key);
+            }
+
+            if (configContainsSetting && !elementWithSameGesturesAlreadyExists)
+            {
+                menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
+                keyBinding.Gesture = keyGesture;
+            }
+            else// If shortcut not found in config file, use default shortcut defined in xaml.
+            {
+                keyGesture = (KeyGesture)keyBinding.Gesture;
+                menuItem.InputGestureText = HotkeyCommands.GetKeyGestureAsString(keyGesture);
+            }
+            
+            InputBindings.Add(new KeyBinding(routedCommand, keyGesture));
+            HotkeyCommands.KeyGestures.Add(keyGesture);
         }
 
         private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)
@@ -304,7 +329,7 @@ namespace StarCatalog
             return true;
         }
 
-        private void PageViewButton_OnClick(object sender, RoutedEventArgs e)
+        private void PageView_OnClick(object sender, RoutedEventArgs e)
         {
             WindowsManager.StoreWindow(this);
             this.Hide();
