@@ -118,16 +118,6 @@ namespace StarCatalog.Windows
                      Validation.GetHasError(this.DeclinationTextBox));
         }
 
-        private void BackButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            WindowsManager.GetLastWindow().Show();
-        }
-
         private void StarRemoveButton_Click(object sender, RoutedEventArgs e)
         {
             var text = this.StarsComboBox.Text;
@@ -137,6 +127,7 @@ namespace StarCatalog.Windows
             MessageBox.Show("Removed!");
 
             UpdateStarComboBox();
+            UpdatePlanetComboBox();
         }
 
         private void PlanetRemoveButton_OnClick(object sender, RoutedEventArgs e)
@@ -148,6 +139,16 @@ namespace StarCatalog.Windows
             MessageBox.Show("Removed");
 
             UpdatePlanetComboBox();
+        }
+
+        private void BackButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            WindowsManager.GetLastWindow().Show();
         }
     }
 }

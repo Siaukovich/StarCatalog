@@ -189,7 +189,7 @@ namespace StarCatalog
             string IconPathSetting = "IconPath";
             string path = ConfigurationManager.AppSettings[IconPathSetting];
             string fileName = ConfigurationManager.AppSettings[settingName];
-            string fullPath = Path.Combine(Environment.CurrentDirectory ,path, fileName);
+            string fullPath = Path.Combine(Environment.CurrentDirectory, path, fileName);
 
             if (!File.Exists(fullPath))
                 return;

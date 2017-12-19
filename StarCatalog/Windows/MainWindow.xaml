@@ -47,6 +47,24 @@
 
     </Window.CommandBindings>
 
+    <Window.Resources>
+            <Style TargetType="MenuItem">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Opacity">
+                                    <DoubleAnimation  Storyboard.TargetProperty="Opacity" 
+                                                      From="0" To="1" 
+                                                      Duration="0:0:0.5" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+    </Window.Resources>
+    
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               Background="{Binding ElementName=Window, Path=Background}" >
@@ -153,6 +171,7 @@
                                     <Button x:Name="InfoButton"
                                             Tag="{Binding Index}"
                                             IsEnabled="{Binding IsConstellation}"
+                                            Style="{StaticResource ButtonStyleUniversal}"
                                             Content="Show full info"
                                             Margin="10" Padding="7"
                                             Click="InfoButton_OnClick" />
@@ -160,6 +179,7 @@
                                     <Button x:Name="RemoveButton"
                                             Tag="{Binding Index}"
                                             IsEnabled="{Binding IsConstellation}"
+                                            Style="{StaticResource ButtonStyleUniversal}"
                                             Content="Remove"
                                             Margin="10" Padding="7"
                                             Click="RemoveButton_OnClick" />
@@ -198,7 +218,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" >
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
+                        UseLayoutRounding="True">
                 <DockPanel LastChildFill="True"
                            Margin="10 0 10 20">
                     <Label Content="Sort by"

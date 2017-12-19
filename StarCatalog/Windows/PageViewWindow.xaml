@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StarCatalog"
         mc:Ignorable="d"
-        Title="Page View" Height="500" Width="850">
+        Title="Page View" Height="500" Width="850"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

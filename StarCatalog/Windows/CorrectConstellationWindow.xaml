@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="CorrectConstellation" 
         Height="500" Width="300"
-        MinHeight="600" MinWidth="300">
+        MinHeight="600" MinWidth="300"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
 
     <Window.Resources>
         <Style x:Key="TextBoxStyle">

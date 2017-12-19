@@ -12,7 +12,9 @@
     <StackPanel HorizontalAlignment="Stretch"
                 Width="Auto"
                 VerticalAlignment="Center"
-                Margin="10">
+                Margin="10"
+                UseLayoutRounding="True"
+                SnapsToDevicePixels="True">
         <TextBlock Text="Input new star info" 
                    HorizontalAlignment="Center"
                    Margin="10 15"

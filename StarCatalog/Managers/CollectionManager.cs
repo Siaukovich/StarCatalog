@@ -38,8 +38,8 @@ namespace StarCatalog
                     ));
 
 
-            constellation1.AddStar("Castor", 1.1e8f, 1.4e29, 4.43e28f);
-            constellation1.AddStar("Pollux", 2.1e8f, 1.1e29, 3.3e28f);
+            constellation1.AddStar("Castor", 1.1e6f, 2.4e22, 8.42e22f);
+            constellation1.AddStar("Pollux", 2.1e6f, 1.1e19, 3.3e18f);
 
             constellation1.Stars[0].AddPlanet("PlanetCastor1", 1.1e4f, 4.8e21, 1.8e4f, 7.3e5f, 1.1e8f);
             constellation1.Stars[0].AddPlanet("PlanetCastor2", 2.2e4f, 3.21e21, 1.28e4f, 17.3e5f, 4.1e8f);
@@ -57,7 +57,7 @@ namespace StarCatalog
                     ));
 
             constellation2.AddStar("Betelgeuse", 1.1e8f, 1.4e29, 4.43e28f);
-            constellation2.AddStar("Mintaka", 2.1e8f, 1.1e29, 3.3e28f);
+            constellation2.AddStar("Mintaka", 2.6e8f, 1.1e29, 3e8f);
 
             constellation2.Stars[1].AddPlanet("PlanetMintaka", 2.2e4f, 3.21e21, 1.28e4f, 17.3e5f, 4.1e8f);
 

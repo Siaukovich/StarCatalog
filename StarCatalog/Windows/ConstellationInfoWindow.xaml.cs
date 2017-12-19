@@ -51,8 +51,8 @@ namespace StarCatalog
         {
             WindowsManager.StoreWindow(this);
             this.Hide();
-            var AddStarWindow = new AddStarWindow();
-            AddStarWindow.Show();
+            var addStarWindow = new AddStarWindow();
+            addStarWindow.Show();
         }
 
         private void CorrectButton_OnClick(object sender, RoutedEventArgs e)

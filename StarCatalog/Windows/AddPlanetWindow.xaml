@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StarCatalog"
         mc:Ignorable="d"
         Title="Add a planet" 
-        Height="400" Width="350"
+        Height="400" Width="360"
         MinWidth="300"
         MinHeight="315" >
     <StackPanel HorizontalAlignment="Stretch"
@@ -106,7 +106,9 @@
         </Grid>
         
         <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    UseLayoutRounding="True"
+                    SnapsToDevicePixels="True">
             <TextBlock Text="Host: "
                        VerticalAlignment="Center"
                        FontSize="15"/>
