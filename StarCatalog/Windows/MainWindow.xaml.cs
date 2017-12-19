@@ -140,7 +140,11 @@ namespace StarCatalog
                 var keyGestureConverter = new KeyGestureConverter();
                 keyGesture = (KeyGesture)keyGestureConverter.ConvertFromString(ConfigurationManager.AppSettings[settingName]);
 
-                return true;
+                // Shift is ambigious and Win used for OS commands.
+                bool modifierIsWinOrShift = keyGesture.Modifiers == ModifierKeys.Windows ||
+                                            keyGesture.Modifiers == ModifierKeys.Shift;
+
+                return !modifierIsWinOrShift;
             }
             catch (Exception e) when (e is ArgumentException || e is NotSupportedException)
             {
