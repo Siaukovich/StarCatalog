@@ -6,8 +6,16 @@
         xmlns:local="clr-namespace:StarCatalog.Windows"
         mc:Ignorable="d"
         Title="CorrectConstellation" 
-        Height="350" Width="300"
+        Height="500" Width="300"
         MinHeight="350" MinWidth="300">
+
+    <Window.Resources>
+        <Style x:Key="TextBoxStyle">
+            <Setter Property="Control.HorizontalAlignment" Value="Center" />
+            <Setter Property="Control.FontSize" Value="18" />
+        </Style>
+    </Window.Resources>
+    
     <StackPanel HorizontalAlignment="Stretch"
                 Width="Auto"
                 VerticalAlignment="Center"
@@ -28,13 +36,6 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-
-            <Grid.Resources>
-                <Style x:Key="TextBoxStyle">
-                    <Setter Property="Control.HorizontalAlignment" Value="Center" />
-                    <Setter Property="Control.FontSize" Value="18" />
-                </Style>
-            </Grid.Resources>
 
             <TextBlock Text="Name:" 
                        Style="{StaticResource TextBoxStyle}" />
@@ -88,6 +89,26 @@
 
         </Grid>
 
+        <TextBlock Text="Remove star:" 
+                   Margin="5"
+                   Style="{StaticResource TextBoxStyle}" />
+        
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="8">
+            
+            <ComboBox x:Name="StarsComboBox"
+                      VerticalAlignment="Center"
+                      Width="100"
+                      ItemsSource="{Binding Stars}"
+                      SelectedItem="{Binding Star}"/>
+            
+            <Button x:Name="StarRemoveButton"
+                    Content="Remove"
+                    Style="{StaticResource ButtonStyleUniversal}" Click="StarRemoveButton_Click" />
+        </StackPanel>
+            
+        
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center">
             <Button x:Name="AddButton"

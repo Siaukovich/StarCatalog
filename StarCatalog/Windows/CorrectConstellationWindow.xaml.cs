@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -16,14 +17,15 @@ namespace StarCatalog.Windows
         public CorrectConstellationWindow()
         {
             InitializeComponent();
-            var currectConstellation = CollectionManager.GetCurrectConstellation();
-            this.Image.Source = new BitmapImage(new Uri(currectConstellation.ImageUri, UriKind.RelativeOrAbsolute));
+            var currentConstellation = CollectionManager.GetCurrectConstellation();
+            this.Image.Source = new BitmapImage(new Uri(currentConstellation.ImageUri, UriKind.RelativeOrAbsolute));
             this.DataContext = new ConstellationChecker
             {
-                Declination = currectConstellation.Coordinates.Declination.Value,
-                RightAscension = currectConstellation.Coordinates.RightAscension.Value,
-                Name = currectConstellation.Name
+                Declination = currentConstellation.Coordinates.Declination.Value,
+                RightAscension = currentConstellation.Coordinates.RightAscension.Value,
+                Name = currentConstellation.Name
             };
+            this.StarsComboBox.ItemsSource = currentConstellation.Stars;
         }
 
         private void ChangeImageButton_OnClick(object sender, RoutedEventArgs e)
@@ -89,6 +91,22 @@ namespace StarCatalog.Windows
         protected override void OnClosed(EventArgs e)
         {
             WindowsManager.GetLastWindow().Show();
+        }
+
+        private void StarRemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var text = this.StarsComboBox.Text;
+            var currentConstellation = CollectionManager.GetCurrectConstellation();
+
+            currentConstellation.RemoveStar(text);
+            MessageBox.Show("Removed!");
+
+            this.StarsComboBox.ItemsSource = null;
+
+            if (currentConstellation.Stars.Count != 0)
+                this.StarsComboBox.ItemsSource = currentConstellation.Stars;
+            else
+                this.StarsComboBox.IsEnabled = false;
         }
     }
 }

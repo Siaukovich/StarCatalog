@@ -118,6 +118,37 @@ namespace StarCatalog
             this.Stars.Add(star);
         }
 
+        public void RemoveStar(string starName)
+        {
+            int starIndex = this.Stars.FindIndex(s => s.Name == starName);
+            if (starIndex == -1)
+                return;
+            
+            this.Stars.RemoveAt(starIndex);
+        }
+
+        public void RemovePlanet(string planetName)
+        {
+            int planetIndex = this.Stars.SelectMany(s => s.Planets)
+                                        .ToList()
+                                        .FindIndex(p => p.Name == planetName);
+
+            if (planetIndex == -1)
+                return;
+
+            for (int i = 0; i < Stars.Count; ++i)
+            {
+                for (int j = 0; j < Stars[i].Planets.Count; ++j)
+                {
+                    if (Stars[i].Planets[j].Name == planetName)
+                    {
+                        Stars[i].Planets.RemoveAt(j);
+                        return;
+                    }
+                }
+            }
+        }
+
         public static bool IsValidName(string name)
         {
             return name.All(c => Char.IsLetter(c) || Char.IsWhiteSpace(c));
