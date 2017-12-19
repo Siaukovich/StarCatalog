@@ -56,7 +56,7 @@ namespace StarCatalog
             catch (ConfigurationErrorsException e)
             {
                 string message = e.Message + " Plugins are not going to be loaded. " +
-                              "Check config file and reload program.";
+                              "Check config file and restart program.";
                 MessageBox.Show(message);
             }
             finally
@@ -75,7 +75,10 @@ namespace StarCatalog
                 this.PluginsMenuItem.IsEnabled = true;
 
                 SetKeyGesture(this.ReloadPluginsCommand, "ReloadPlugins", reloadPluginsMenuItem, HotkeyCommandsManager.ReloadPlugins);
-                SetIcon(reloadPluginsMenuItem, "ReloadPluginsIcon");
+
+                string IconPathSetting = "IconPath";
+                if (ConfigurationManager.AppSettings.AllKeys.Contains(IconPathSetting))
+                    SetIcon(reloadPluginsMenuItem, "ReloadPluginsIcon");
             }
         }
 
@@ -166,6 +169,13 @@ namespace StarCatalog
 
         private void SetMenuIcons()
         {
+            string IconPathSetting = "IconPath";
+            if (!ConfigurationManager.AppSettings.AllKeys.Contains(IconPathSetting))
+            {
+                MessageBox.Show("Path to icons was not found in config file! Check config file and restart program");
+                return;
+            }
+
             SetIcon(this.SaveFileMenuItem, "SaveFileIcon");
             SetIcon(this.OpenFileMenuItem, "OpenFileIcon");
             SetIcon(this.ExitMenuItem, "ExitIcon");
@@ -173,13 +183,10 @@ namespace StarCatalog
 
         private void SetIcon(MenuItem menuItem, string settingName)
         {
-            string IconPathSetting = "IconPath";
-            if (!ConfigurationManager.AppSettings.AllKeys.Contains(IconPathSetting))
-                return;
-
             if (!ConfigurationManager.AppSettings.AllKeys.Contains(settingName))
                 return;
 
+            string IconPathSetting = "IconPath";
             string path = ConfigurationManager.AppSettings[IconPathSetting];
             string fileName = ConfigurationManager.AppSettings[settingName];
             string fullPath = Path.Combine(Environment.CurrentDirectory ,path, fileName);
