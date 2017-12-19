@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CorrectConstellation" 
         Height="500" Width="300"
-        MinHeight="350" MinWidth="300">
+        MinHeight="600" MinWidth="300">
 
     <Window.Resources>
         <Style x:Key="TextBoxStyle">
@@ -100,15 +100,32 @@
             <ComboBox x:Name="StarsComboBox"
                       VerticalAlignment="Center"
                       Width="100"
-                      ItemsSource="{Binding Stars}"
-                      SelectedItem="{Binding Star}"/>
+                      ItemsSource="{Binding Stars}"/>
             
             <Button x:Name="StarRemoveButton"
                     Content="Remove"
-                    Style="{StaticResource ButtonStyleUniversal}" Click="StarRemoveButton_Click" />
+                    Style="{StaticResource ButtonStyleUniversal}" 
+                    Click="StarRemoveButton_Click" />
         </StackPanel>
-            
-        
+
+        <TextBlock Text="Remove planet:" 
+                   Margin="5"
+                   Style="{StaticResource TextBoxStyle}" />
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="8">
+
+            <ComboBox x:Name="PlanetsComboBox"
+                      VerticalAlignment="Center"
+                      Width="100"/>
+
+            <Button x:Name="PlanetRemoveButton"
+                    Content="Remove"
+                    Style="{StaticResource ButtonStyleUniversal}" 
+                    Click="PlanetRemoveButton_OnClick" />
+        </StackPanel>
+
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center">
             <Button x:Name="AddButton"

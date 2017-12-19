@@ -129,13 +129,6 @@ namespace StarCatalog
 
         public void RemovePlanet(string planetName)
         {
-            int planetIndex = this.Stars.SelectMany(s => s.Planets)
-                                        .ToList()
-                                        .FindIndex(p => p.Name == planetName);
-
-            if (planetIndex == -1)
-                return;
-
             for (int i = 0; i < Stars.Count; ++i)
             {
                 for (int j = 0; j < Stars[i].Planets.Count; ++j)

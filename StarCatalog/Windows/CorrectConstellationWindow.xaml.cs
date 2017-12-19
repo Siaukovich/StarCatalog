@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -25,7 +26,41 @@ namespace StarCatalog.Windows
                 RightAscension = currentConstellation.Coordinates.RightAscension.Value,
                 Name = currentConstellation.Name
             };
-            this.StarsComboBox.ItemsSource = currentConstellation.Stars;
+            UpdateStarComboBox();
+            UpdatePlanetComboBox();
+        }
+
+        private void UpdateStarComboBox()
+        {
+            Constellation currentConstellation = CollectionManager.GetCurrectConstellation();
+
+            this.StarsComboBox.ItemsSource = null;
+
+            if (currentConstellation.Stars.Count != 0)
+                this.StarsComboBox.ItemsSource = currentConstellation.Stars;
+            else
+            {
+                this.StarsComboBox.IsEnabled = false;
+                this.StarRemoveButton.IsEnabled = false;
+            }
+        }
+
+        private void UpdatePlanetComboBox()
+        {
+            Constellation currentConstellation = CollectionManager.GetCurrectConstellation();
+
+            this.PlanetsComboBox.ItemsSource = null;
+            List<string> planets = currentConstellation.Stars.SelectMany(s => s.Planets)
+                                                             .Select(p => p.Name)
+                                                             .ToList();
+
+            if (planets.Count != 0)
+                this.PlanetsComboBox.ItemsSource = planets;
+            else
+            {
+                this.PlanetsComboBox.IsEnabled = false;
+                this.PlanetRemoveButton.IsEnabled = false;
+            }
         }
 
         private void ChangeImageButton_OnClick(object sender, RoutedEventArgs e)
@@ -101,12 +136,18 @@ namespace StarCatalog.Windows
             currentConstellation.RemoveStar(text);
             MessageBox.Show("Removed!");
 
-            this.StarsComboBox.ItemsSource = null;
+            UpdateStarComboBox();
+        }
 
-            if (currentConstellation.Stars.Count != 0)
-                this.StarsComboBox.ItemsSource = currentConstellation.Stars;
-            else
-                this.StarsComboBox.IsEnabled = false;
+        private void PlanetRemoveButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var text = this.PlanetsComboBox.Text;
+            var currentConstellation = CollectionManager.GetCurrectConstellation();
+
+            currentConstellation.RemovePlanet(text);
+            MessageBox.Show("Removed");
+
+            UpdatePlanetComboBox();
         }
     }
 }

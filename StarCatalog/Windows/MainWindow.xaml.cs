@@ -105,7 +105,6 @@ namespace StarCatalog
                 {
                     elementWithSameGesturesAlreadyExists = HotkeyCommandsManager.KeyGestures.Any
                         (kg => kg.Modifiers == keyGesture.Modifiers && kg.Key == keyGesture.Key);
-                    
                 }
             }
             else
