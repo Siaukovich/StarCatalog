@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using StarCatalog.Helpers;
 using StarCatalog.Windows;
@@ -25,6 +26,7 @@ namespace StarCatalog
             this.Show();
             LoadPlugins();
             SetHotkeys();
+            SetMenuIcons();
         }
 
         private async void LoadPlugins()
@@ -73,6 +75,7 @@ namespace StarCatalog
                 this.PluginsMenuItem.IsEnabled = true;
 
                 SetKeyGesture(this.ReloadPluginsCommand, "ReloadPlugins", reloadPluginsMenuItem, HotkeyCommandsManager.ReloadPlugins);
+                SetIcon(reloadPluginsMenuItem, "ReloadPluginsIcon");
             }
         }
 
@@ -159,6 +162,35 @@ namespace StarCatalog
                 keyGesture = null;
                 return false;
             }
+        }
+
+        private void SetMenuIcons()
+        {
+            SetIcon(this.SaveFileMenuItem, "SaveFileIcon");
+            SetIcon(this.OpenFileMenuItem, "OpenFileIcon");
+            SetIcon(this.ExitMenuItem, "ExitIcon");
+        }
+
+        private void SetIcon(MenuItem menuItem, string settingName)
+        {
+            string IconPathSetting = "IconPath";
+            if (!ConfigurationManager.AppSettings.AllKeys.Contains(IconPathSetting))
+                return;
+
+            if (!ConfigurationManager.AppSettings.AllKeys.Contains(settingName))
+                return;
+
+            string path = ConfigurationManager.AppSettings[IconPathSetting];
+            string fileName = ConfigurationManager.AppSettings[settingName];
+            string fullPath = Path.Combine(Environment.CurrentDirectory ,path, fileName);
+
+            if (!File.Exists(fullPath))
+                return;
+
+            var uri = new Uri(fullPath, UriKind.Absolute);
+            var image = new BitmapImage(uri);
+
+            menuItem.Icon = new Image {Source = image, MaxHeight = 20, MaxWidth = 20 };
         }
 
         private void ReloadPlugins_OnClick(object sender, RoutedEventArgs e)

@@ -22,7 +22,7 @@
                     Gesture="Ctrl+S"/>
         
         <KeyBinding x:Name="ExitCommand" 
-                    Gesture="Ctrl+Q"/>
+                    Gesture="Ctrl+E"/>
         
         <KeyBinding x:Name="ReloadPluginsCommand" 
                     Gesture="Ctrl+R"/>
